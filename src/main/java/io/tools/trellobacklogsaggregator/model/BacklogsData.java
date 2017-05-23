@@ -2,16 +2,14 @@ package io.tools.trellobacklogsaggregator.model;
 
 import java.util.List;
 
-import com.julienvey.trello.domain.Board;
-
 public class BacklogsData {
-    private List<Board> boards;
+    private List<BoardDetail> boards;
 
-    public List<Board> getBoards() {
+    public List<BoardDetail> getBoards() {
         return boards;
     }
 
-    public void setBoards(List<Board> boards) {
+    public void setBoards(List<BoardDetail> boards) {
         this.boards = boards;
     }
 

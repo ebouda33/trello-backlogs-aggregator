@@ -26,10 +26,15 @@
     <table class="table table-striped">
         <tr>
             <th>Name</th>
-            
+            <th>Business complexity</th>
+            <th>Consumed complexity</th>
+            <th>Total complexity</th>
         </tr>
         <tr th:each="board : ${boards}">
-            <td th:text="${board.name}"/>            
+            <td th:text="${board.name}"/>           
+            <td th:text="${board.businessComplexity}"/>
+            <td th:text="${board.consumedComplexity}"/>
+            <td th:text="${board.totalComplexity}"/>
         </tr>
     </table>
 
