@@ -62,6 +62,11 @@
             <artifactId>jquery</artifactId>
             <version>2.1.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.julienvey.trello</groupId>
+            <artifactId>trello-java-wrapper</artifactId>
+            <version>0.3.3-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
