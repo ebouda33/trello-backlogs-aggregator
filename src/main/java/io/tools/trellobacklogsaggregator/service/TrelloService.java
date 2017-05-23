@@ -11,22 +11,27 @@ import org.springframework.stereotype.Service;
 import com.julienvey.trello.domain.Argument;
 import com.julienvey.trello.domain.Board;
 
+import io.tools.trellobacklogsaggregator.model.BacklogsData;
+
 @Service
 public class TrelloService {
-    
-    @Autowired 
+
+    @Autowired
     private TrelloApi trelloApi;
-    
-    private final Logger logger = LoggerFactory.getLogger(this.getClass()); 
-    
-    public void readBacklogs (String organizationId) {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public BacklogsData readBacklogs(String organizationId) {
         Argument fields = new Argument("fields", "name");
         List<Board> boards = trelloApi.getOrganizationBoards(organizationId, fields);
         List<Board> storiesBoard = new ArrayList<>();
         boards.stream().filter(board -> board.getName().startsWith("Backlog")).forEach(board -> {
             storiesBoard.add(board);
-            logger.info(board.getName());
-            
+            logger.debug(board.getName());
         });
+
+        BacklogsData backlogsData = new BacklogsData();
+        backlogsData.setBoards(storiesBoard);
+        return backlogsData;
     }
 }

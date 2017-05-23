@@ -8,24 +8,28 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
+import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
 import io.tools.trellobacklogsaggregator.service.TrelloService;
 
 @Configuration
 @EnableScheduling
 public class BacklogsReaderBatch {
-    
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
-    @Autowired 
+
+    @Autowired
     private TrelloService trelloService;
-    
-    @Autowired 
+
+    @Autowired
     private CustomConfiguration customConfiguration;
-    
+
+    @Autowired
+    private BacklogsRepository backlogsRepository;
+
     @Scheduled(cron = "*/10 * * * * *")
     public void execute() {
         logger.debug("BacklogsReaderBatch starting");
-        trelloService.readBacklogs(customConfiguration.getOrganisationId());
+        backlogsRepository.save(trelloService.readBacklogs(customConfiguration.getOrganisationId()));
         logger.debug("BacklogsReaderBatch done");
     }
 }

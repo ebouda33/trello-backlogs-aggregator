@@ -4,34 +4,34 @@
 
 <title>Spring Boot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="../static/css/custom.css" th:href="@{css/custom.css}"
-    rel="stylesheet" media="screen" />
+<link href="../static/css/custom.css" th:href="@{css/custom.css}" rel="stylesheet" media="screen" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<link
-    href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
-    th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
-    rel="stylesheet" media="screen" />
+<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+    th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
 
-<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
-    th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
 
-<link href="../static/css/guru.css" th:href="@{css/guru.css}"
-    rel="stylesheet" media="screen" />
+<link href="../static/css/guru.css" th:href="@{css/guru.css}" rel="stylesheet" media="screen" />
 </head>
 <div class="container">
     <nav class="navbar navbar-default">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Accueil</a></li>            
+            <li class="active"><a href="#">Accueil</a></li>
         </ul>
     </nav>
 
-    <div class="jumbotron">
+    <h2>Backlog List</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th>
+            
+        </tr>
+        <tr th:each="board : ${boards}">
+            <td th:text="${board.name}"/>            
+        </tr>
+    </table>
 
-        <h1>Hello</h1>
-
-        <h2>It works!!!</h2>
-    </div>
 </div>
 </html>
