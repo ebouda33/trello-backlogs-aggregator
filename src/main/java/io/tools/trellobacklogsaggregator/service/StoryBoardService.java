@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.julienvey.trello.domain.TList;
 
+@Service
 public class StoryBoardService {
     private static final String LIVRE_EN_RECETTE = "Livré en recette";
 
@@ -109,5 +111,23 @@ public class StoryBoardService {
 
     private boolean checkListExist(TList tlist, String nameTocheck) {
         return nameTocheck.toLowerCase().equals(tlist.getName().trim().toLowerCase());
+    }
+
+    public boolean checkListInSprint(TList tlist) {
+        boolean inSprint = false;
+        switch (tlist.getName()) {
+            case A_FAIRE:
+            case EN_ATTENTE:
+            case EN_COURS:
+            case A_LIVRER:
+            case PRET_A_DEMONTRER:
+            case PRET_POUR_MISE_EN_QUALIFICATION:
+                inSprint = true;
+                break;
+            default:
+                inSprint = false;
+
+        }
+        return inSprint;
     }
 }

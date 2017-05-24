@@ -14,6 +14,7 @@ import com.julienvey.trello.domain.TList;
 
 import io.tools.trellobacklogsaggregator.model.BacklogsData;
 import io.tools.trellobacklogsaggregator.model.BoardDetail;
+import io.tools.trellobacklogsaggregator.model.Sprint;
 
 @Service
 public class TrelloService {
@@ -24,20 +25,26 @@ public class TrelloService {
     @Autowired
     private BoardService boardService;
 
+    @Autowired
+    private StoryBoardService storyBoardService;
+
+    @Autowired
+    private SprintService sprintService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private BoardDetail detailedBoard;
+    private Sprint sprint;
 
     public BacklogsData readBacklogs(String organizationId) {
         List<Board> storiesBoards = getBoards(organizationId);
 
         List<BoardDetail> storiesDetailedBoards = new ArrayList<>();
-
+        sprint = new Sprint();
         for (Board board : storiesBoards) {
             List<TList> tLists = board.fetchLists();
             detailedBoard = new BoardDetail(board);
 
-            StoryBoardService storyBoardService = new StoryBoardService();
             boolean consistency = storyBoardService.checkListConsistency(tLists);
             if (!consistency) {
                 logger.error(board.getName() + " ne contient pas toutes les colonnes définies dans le modèle de backlog");
@@ -45,6 +52,9 @@ public class TrelloService {
             tLists.forEach(tList -> {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
+                    if (storyBoardService.checkListInSprint(tList)) {
+                        sprint = sprintService.addCard(sprint, tList, card);
+                    }
                 });
             });
 
@@ -53,6 +63,7 @@ public class TrelloService {
 
         BacklogsData backlogsData = new BacklogsData();
         backlogsData.setBoards(storiesDetailedBoards);
+        backlogsData.setSprint(sprint);
         return backlogsData;
     }
 

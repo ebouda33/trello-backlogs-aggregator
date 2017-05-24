@@ -18,12 +18,12 @@
 <div class="container">
     <nav class="navbar navbar-default">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Accueil</a></li>
-            <li><a href="/sprint">Sprint</a></li>
+            <li><a href="/">Accueil</a></li>
+            <li class="active"><a href="/sprint">Sprint</a></li>
         </ul>
     </nav>
 
-    <h2>Backlog List</h2>
+    <h2>Sprint</h2>
     <table class="table table-striped">
         <tr>
             <th>Name</th>
@@ -32,12 +32,31 @@
             <th>Remained complexity</th>
             <th>Total complexity</th>
         </tr>
-        <tr th:each="board : ${boards}">
-            <td th:text="${board.name}"/>           
-            <td th:text="${board.businessComplexity}"/>
-            <td th:text="${board.consumedComplexity}"/>
-            <td th:text="${board.remainedComplexity}"/>
-            <td th:text="${board.totalComplexity}"/>
+        <tr>
+            <td/>           
+            <td th:text="${sprint.businessComplexity}"/>
+            <td th:text="${sprint.consumedComplexity}"/>
+            <td th:text="${sprint.remainedComplexity}"/>
+            <td th:text="${sprint.totalComplexity}"/>
+        </tr>
+    </table>
+    
+    <h2>US</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Backlog</th>
+            <th>Titre</th>
+            <th>Business complexity</th>
+            <th>Consumed complexity</th>
+            <th>Remained complexity</th>
+            <th>Total complexity</th>
+        </tr>
+        <tr>
+            <td/>           
+            <td th:text="${sprint.businessComplexity}"/>
+            <td th:text="${sprint.consumedComplexity}"/>
+            <td th:text="${sprint.remainedComplexity}"/>
+            <td th:text="${sprint.totalComplexity}"/>
         </tr>
     </table>
 

@@ -1,16 +1,21 @@
 package io.tools.trellobacklogsaggregator.model;
 
-import com.julienvey.trello.domain.Board;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BoardDetail {
-    private String name;
+public class Sprint {
     private Double businessComplexity = 0D;
     private Double consumedComplexity = 0D;
-    private Double remainedComplexity = 0D;
     private Double totalComplexity = 0D;
+    private Double remainedComplexity = 0D;
+    private List<Column> columns = new ArrayList<>();
 
-    public BoardDetail(Board board) {
-        this.setName(board.getName());
+    public List<Column> getColumns() {
+        return columns;
+    }
+
+    public void addColumn(Column column) {
+        this.columns.add(column);
     }
 
     public Double getBusinessComplexity() {
@@ -37,14 +42,6 @@ public class BoardDetail {
         this.totalComplexity = totalComplexity;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Double getRemainedComplexity() {
         return remainedComplexity;
     }
@@ -52,5 +49,4 @@ public class BoardDetail {
     public void setRemainedComplexity(Double remainedComplexity) {
         this.remainedComplexity = remainedComplexity;
     }
-
 }

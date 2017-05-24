@@ -17,6 +17,7 @@ public class BoardService {
         board.setBusinessComplexity(board.getBusinessComplexity() + cardService.getCardValue(card));
         board.setConsumedComplexity(board.getConsumedComplexity() + cardService.getComplexiteRealisee(card));
         board.setTotalComplexity(board.getTotalComplexity() + cardService.getComplexiteTotale(card));
+        board.setRemainedComplexity(board.getTotalComplexity() - board.getConsumedComplexity());
         return board;
     }
 }
