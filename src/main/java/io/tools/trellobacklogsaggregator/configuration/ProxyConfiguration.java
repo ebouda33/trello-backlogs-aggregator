@@ -11,33 +11,35 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ProxyConfiguration {
-    
+
     @Autowired
     private CustomConfiguration customConfiguration;
 
     @PostConstruct
     public void init() {
         Properties props = System.getProperties();
-        props.put("http.proxyHost", customConfiguration.getProxyHost());
-        props.put("http.proxyPort", customConfiguration.getProxyPort());
+        if (!customConfiguration.getProxyHost().isEmpty()) {
+            props.put("http.proxyHost", customConfiguration.getProxyHost());
+            props.put("http.proxyPort", customConfiguration.getProxyPort());
 
-        props.put("https.proxyHost", customConfiguration.getProxyHost());
-        props.put("https.proxyPort", customConfiguration.getProxyPort());
+            props.put("https.proxyHost", customConfiguration.getProxyHost());
+            props.put("https.proxyPort", customConfiguration.getProxyPort());
 
-        final String authUser = customConfiguration.getProxyUser();
-        final String authPassword = customConfiguration.getProxyPassword();
-        Authenticator.setDefault(
-                new Authenticator() {
-                    public PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(
-                                authUser, authPassword.toCharArray());
-                    }
-                }
-                );
+            final String authUser = customConfiguration.getProxyUser();
+            final String authPassword = customConfiguration.getProxyPassword();
+            Authenticator.setDefault(
+                    new Authenticator() {
+                        public PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(
+                                    authUser, authPassword.toCharArray());
+                        }
+                    });
 
-        System.setProperty("http.proxyUser", authUser);
-        System.setProperty("http.proxyPassword", authPassword);
-        System.setProperty("https.proxyUser", authUser);
-        System.setProperty("https.proxyPassword", authPassword);
+            System.setProperty("http.proxyUser", authUser);
+            System.setProperty("http.proxyPassword", authPassword);
+            System.setProperty("https.proxyUser", authUser);
+            System.setProperty("https.proxyPassword", authPassword);
+        }
+
     }
 }
