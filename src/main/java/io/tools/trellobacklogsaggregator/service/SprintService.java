@@ -30,6 +30,7 @@ public class SprintService {
             column = new Column();
             column.setName(listName);
             column.addCard(card);
+            sprint.addColumn(column);
         } else {
             column.addCard(card);
         }

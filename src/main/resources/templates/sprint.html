@@ -42,21 +42,14 @@
     </table>
     
     <h2>US</h2>
-    <table class="table table-striped">
+    <table class="table table-striped" th:each="column : ${sprint.columns}">
         <tr>
-            <th>Backlog</th>
+            <th>Statut</th>
             <th>Titre</th>
-            <th>Business complexity</th>
-            <th>Consumed complexity</th>
-            <th>Remained complexity</th>
-            <th>Total complexity</th>
         </tr>
-        <tr>
-            <td/>           
-            <td th:text="${sprint.businessComplexity}"/>
-            <td th:text="${sprint.consumedComplexity}"/>
-            <td th:text="${sprint.remainedComplexity}"/>
-            <td th:text="${sprint.totalComplexity}"/>
+        <tr th:each="card : ${column.cards}">
+            <td th:text="${column.name}"/>
+            <td th:text="${card.name}"/>
         </tr>
     </table>
 

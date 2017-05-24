@@ -115,19 +115,15 @@ public class StoryBoardService {
 
     public boolean checkListInSprint(TList tlist) {
         boolean inSprint = false;
-        switch (tlist.getName()) {
-            case A_FAIRE:
-            case EN_ATTENTE:
-            case EN_COURS:
-            case A_LIVRER:
-            case PRET_A_DEMONTRER:
-            case PRET_POUR_MISE_EN_QUALIFICATION:
-                inSprint = true;
-                break;
-            default:
-                inSprint = false;
-
+        if (A_FAIRE.toLowerCase().equals(tlist.getName().toLowerCase())
+                || EN_ATTENTE.toLowerCase().equals(tlist.getName().toLowerCase())
+                || EN_COURS.toLowerCase().equals(tlist.getName().toLowerCase())
+                || A_LIVRER.toLowerCase().equals(tlist.getName().toLowerCase())
+                || PRET_A_DEMONTRER.toLowerCase().equals(tlist.getName().toLowerCase())
+                || PRET_POUR_MISE_EN_QUALIFICATION.toLowerCase().equals(tlist.getName().toLowerCase())) {
+            inSprint = true;
         }
+
         return inSprint;
     }
 }
