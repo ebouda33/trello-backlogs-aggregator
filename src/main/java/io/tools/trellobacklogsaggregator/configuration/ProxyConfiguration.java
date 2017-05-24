@@ -25,20 +25,20 @@ public class ProxyConfiguration {
             props.put("https.proxyHost", customConfiguration.getProxyHost());
             props.put("https.proxyPort", customConfiguration.getProxyPort());
 
-            final String authUser = customConfiguration.getProxyUser();
-            final String authPassword = customConfiguration.getProxyPassword();
-            Authenticator.setDefault(
-                    new Authenticator() {
-                        public PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(
-                                    authUser, authPassword.toCharArray());
-                        }
-                    });
+            if (!customConfiguration.getProxyUser().isEmpty()) {
+                final String authUser = customConfiguration.getProxyUser();
+                final String authPassword = customConfiguration.getProxyPassword();
+                Authenticator.setDefault(new Authenticator() {
+                    public PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(authUser, authPassword.toCharArray());
+                    }
+                });
 
-            System.setProperty("http.proxyUser", authUser);
-            System.setProperty("http.proxyPassword", authPassword);
-            System.setProperty("https.proxyUser", authUser);
-            System.setProperty("https.proxyPassword", authPassword);
+                System.setProperty("http.proxyUser", authUser);
+                System.setProperty("http.proxyPassword", authPassword);
+                System.setProperty("https.proxyUser", authUser);
+                System.setProperty("https.proxyPassword", authPassword);
+            }
         }
 
     }
