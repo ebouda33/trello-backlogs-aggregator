@@ -21,7 +21,7 @@ public class SprintService {
         for (int i = 0; i < sprint.getColumns().size(); i++) {
             Column columnInSprint = sprint.getColumns().get(i);
             String columnInSprintName = columnInSprint.getName();
-            if (listName.equals(columnInSprintName)) {
+            if (listName.equalsIgnoreCase(columnInSprintName)) {
                 column = columnInSprint;
                 break;
             }
