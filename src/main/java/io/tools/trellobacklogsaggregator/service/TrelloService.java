@@ -26,7 +26,7 @@ public class TrelloService {
     private BoardService boardService;
 
     @Autowired
-    private StoryBoardService storyBoardService;
+    private ListService listService;
 
     @Autowired
     private SprintService sprintService;
@@ -45,14 +45,11 @@ public class TrelloService {
             List<TList> tLists = board.fetchLists();
             detailedBoard = new BoardDetail(board);
 
-            boolean consistency = storyBoardService.checkListConsistency(tLists);
-            if (!consistency) {
-                logger.error(board.getName() + " ne contient pas toutes les colonnes définies dans le modèle de backlog");
-            }
+            listService.checkListConsistency(tLists);
             tLists.forEach(tList -> {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
-                    if (storyBoardService.checkListInSprint(tList)) {
+                    if (listService.checkListInSprint(tList)) {
                         sprint = sprintService.addCard(sprint, tList, card);
                     }
                 });
