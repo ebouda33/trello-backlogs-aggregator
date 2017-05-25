@@ -41,11 +41,11 @@
         </tr>
     </table>
     
-    <h2>US</h2>
+    <h2>User Stories</h2>
     <table class="table table-striped" th:each="column : ${sprint.columns}">
         <tr>
-            <th>Statut</th>
-            <th>Titre</th>
+            <th>Status</th>
+            <th>Title</th>
         </tr>
         <tr th:each="card : ${column.cards}">
             <td th:text="${column.name}"/>
