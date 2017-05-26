@@ -39,7 +39,6 @@ Description=Trello Backlogs AggregatoR
 
 [Service]
 Type=oneshot
-#ExecStart=/data/startup.sh
 ExecStart=/bin/sh -c "java -Dloader.path=[INSTALLATION_PATH]  -jar [INSTALLATION_PATH]/trello-backlogs-aggregator-0.0.1-SNAPSHOT.jar"
 
 [Install]
