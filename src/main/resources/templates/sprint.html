@@ -30,20 +30,21 @@
             <th>Remained complexity</th>
             <th>Total complexity</th>
         </tr>
-        <tr>
-            <td/>           
-            <td th:text="${sprint.businessComplexity}"/>
-            <td th:text="${sprint.consumedComplexity}"/>
-            <td th:text="${sprint.remainedComplexity}"/>
-            <td th:text="${sprint.totalComplexity}"/>
-        </tr>
         <tr th:each="column : ${sprint.columns}">
             <td th:text="${column.name}"/>           
-            <td th:text="${column.businessComplexity}"/>
-            <td th:text="${column.consumedComplexity}"/>
-            <td th:text="${column.remainedComplexity}"/>
-            <td th:text="${column.totalComplexity}"/>
+            <td th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(column.consumedComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}"/>
         </tr>
+        <tr>
+            <td>TOTAL</td>           
+            <td th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(sprint.consumedComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(sprint.remainedComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(sprint.totalComplexity, 1, 2)}"/>
+        </tr>
+        
     </table>
     
     <h2>User Stories</h2>

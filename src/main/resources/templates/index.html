@@ -32,10 +32,10 @@
         </tr>
         <tr th:each="board : ${boards}">
             <td th:text="${board.name}"/>           
-            <td th:text="${board.businessComplexity}"/>
-            <td th:text="${board.consumedComplexity}"/>
-            <td th:text="${board.remainedComplexity}"/>
-            <td th:text="${board.totalComplexity}"/>
+            <td th:text="${#numbers.formatDecimal(board.businessComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(board.consumedComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(board.remainedComplexity, 1, 2)}"/>
+            <td th:text="${#numbers.formatDecimal(board.totalComplexity, 1, 2)}"/>
         </tr>
     </table>
 
