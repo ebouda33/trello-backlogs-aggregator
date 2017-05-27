@@ -37,6 +37,13 @@
             <td th:text="${sprint.remainedComplexity}"/>
             <td th:text="${sprint.totalComplexity}"/>
         </tr>
+        <tr th:each="column : ${sprint.columns}">
+            <td th:text="${column.name}"/>           
+            <td th:text="${column.businessComplexity}"/>
+            <td th:text="${column.consumedComplexity}"/>
+            <td th:text="${column.remainedComplexity}"/>
+            <td th:text="${column.totalComplexity}"/>
+        </tr>
     </table>
     
     <h2>User Stories</h2>

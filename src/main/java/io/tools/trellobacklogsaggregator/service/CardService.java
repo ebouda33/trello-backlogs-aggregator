@@ -19,7 +19,7 @@ public class CardService {
         return reference.toString().trim();
     }
 
-    public Double getCardValue(Card card) {
+    public Double getBusinessComplexity(Card card) {
         Double value = 0.0;
         String cardName = card.getName().trim();
         if ('(' == cardName.charAt(0)) {
@@ -31,25 +31,25 @@ public class CardService {
         return value;
     }
 
-    public Double getComplexiteRealisee(Card card) {
-        return getComplexite(card, "[", "]");
+    public Double getConsumedComplexity(Card card) {
+        return getComplexity(card, "[", "]");
     }
 
-    public Double getComplexiteTotale(Card card) {
-        return getComplexite(card, "{", "}");
+    public Double getTotalComplexity(Card card) {
+        return getComplexity(card, "{", "}");
     }
 
-    private Double getComplexite(Card card, String delimiterDebut, String delimiterFin) {
+    private Double getComplexity(Card card, String delimiterStart, String delimiterEnd) {
         Double value = 0.0;
         String cardName = card.getName().trim();
-        if (cardName.contains(delimiterFin)) {
-            int indexComplexiteDebut = cardName.lastIndexOf(delimiterDebut) + delimiterDebut.length();
-            int indexComplexiteFin = cardName.lastIndexOf(delimiterFin);
+        if (cardName.contains(delimiterEnd)) {
+            int indexComplexityStart = cardName.lastIndexOf(delimiterStart) + delimiterStart.length();
+            int indexComplexityEnd = cardName.lastIndexOf(delimiterEnd);
 
-            String complexitePattern = cardName.substring(indexComplexiteDebut, indexComplexiteFin);
-            String complexite = complexitePattern.replace(",", ".");
+            String complexityPattern = cardName.substring(indexComplexityStart, indexComplexityEnd);
+            String complexity = complexityPattern.replace(",", ".");
             try {
-                value = Double.valueOf(complexite);
+                value = Double.valueOf(complexity);
             } catch (NumberFormatException e) {
                 value = 0.0;
             }

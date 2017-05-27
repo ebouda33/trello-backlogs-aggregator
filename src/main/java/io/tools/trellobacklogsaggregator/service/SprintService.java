@@ -35,9 +35,18 @@ public class SprintService {
             column.addCard(card);
         }
 
-        sprint.setBusinessComplexity(sprint.getBusinessComplexity() + cardService.getCardValue(card));
-        sprint.setConsumedComplexity(sprint.getConsumedComplexity() + cardService.getComplexiteRealisee(card));
-        sprint.setTotalComplexity(sprint.getTotalComplexity() + cardService.getComplexiteTotale(card));
+        Double cardBusinessComplexity = cardService.getBusinessComplexity(card);
+        Double cardConsumedComplexity = cardService.getConsumedComplexity(card);
+        Double cardTotalComplexity = cardService.getTotalComplexity(card);
+
+        column.setBusinessComplexity(column.getBusinessComplexity() + cardBusinessComplexity);
+        column.setConsumedComplexity(column.getConsumedComplexity() + cardConsumedComplexity);
+        column.setTotalComplexity(column.getTotalComplexity() + cardTotalComplexity);
+        column.setRemainedComplexity(column.getTotalComplexity() - column.getConsumedComplexity());
+
+        sprint.setBusinessComplexity(sprint.getBusinessComplexity() + cardBusinessComplexity);
+        sprint.setConsumedComplexity(sprint.getConsumedComplexity() + cardConsumedComplexity);
+        sprint.setTotalComplexity(sprint.getTotalComplexity() + cardTotalComplexity);
         sprint.setRemainedComplexity(sprint.getTotalComplexity() - sprint.getConsumedComplexity());
         return sprint;
     }

@@ -14,9 +14,9 @@ public class BoardService {
     private CardService cardService;
 
     public BoardDetail addCard(BoardDetail board, Card card) {
-        board.setBusinessComplexity(board.getBusinessComplexity() + cardService.getCardValue(card));
-        board.setConsumedComplexity(board.getConsumedComplexity() + cardService.getComplexiteRealisee(card));
-        board.setTotalComplexity(board.getTotalComplexity() + cardService.getComplexiteTotale(card));
+        board.setBusinessComplexity(board.getBusinessComplexity() + cardService.getBusinessComplexity(card));
+        board.setConsumedComplexity(board.getConsumedComplexity() + cardService.getConsumedComplexity(card));
+        board.setTotalComplexity(board.getTotalComplexity() + cardService.getTotalComplexity(card));
         board.setRemainedComplexity(board.getTotalComplexity() - board.getConsumedComplexity());
         return board;
     }
