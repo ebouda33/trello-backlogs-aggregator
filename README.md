@@ -7,7 +7,7 @@ You can define which columns are in the sprint.
 You can summarize card values by their complexity. 
 To take in account complexities, the card must be declared in Trello like this : 
 ```
-(businessComplexity) card title {consumedComplexity} [totalComplexity]
+(businessComplexity) card title [consumedComplexity] {totalComplexity}
 ```
 
 This application need bywan/trello-java-wrapper dependency but, for now, the PR for organization boards is not taken in account.
