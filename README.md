@@ -29,6 +29,8 @@ trello.access.token=3a04878454def84d8e4g0ef4g8f7h7g4hrs4f7hz89fvh94f8dvh4z87grj1
 
 trello.column.allowed=Ideas, Writing in progress, User stories ready, To do, In progress, Done in sprint, Q&A, Done in production
 trello.column.sprint=To do, In progress, Done in sprint
+
+batch.frequency=0 * * * * *
 ```
 
 To install the application with systemd, create a file trello-backlogs-aggregator.service in /etc/systemd/system like this :

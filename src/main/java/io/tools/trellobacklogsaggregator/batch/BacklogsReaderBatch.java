@@ -26,7 +26,7 @@ public class BacklogsReaderBatch {
     @Autowired
     private BacklogsRepository backlogsRepository;
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "${batch.frequency}")
     public void execute() {
         logger.debug("BacklogsReaderBatch starting");
         backlogsRepository.save(trelloService.readBacklogs(customConfiguration.getOrganisationId()));
