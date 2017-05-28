@@ -12,6 +12,7 @@ import com.julienvey.trello.domain.Argument;
 import com.julienvey.trello.domain.Board;
 import com.julienvey.trello.domain.TList;
 
+import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
 import io.tools.trellobacklogsaggregator.model.BacklogError;
 import io.tools.trellobacklogsaggregator.model.BacklogsData;
 import io.tools.trellobacklogsaggregator.model.BoardDetail;
@@ -31,6 +32,9 @@ public class TrelloService {
 
     @Autowired
     private SprintService sprintService;
+
+    @Autowired
+    private CustomConfiguration customConfiguration;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -75,10 +79,11 @@ public class TrelloService {
         Argument fields = new Argument("fields", "name");
         List<Board> boards = trelloApi.getOrganizationBoards(organizationId, fields);
         List<Board> storiesBoards = new ArrayList<>();
-        boards.stream().filter(board -> board.getName().startsWith("Backlog")).forEach(board -> {
-            storiesBoards.add(board);
-            logger.debug(board.getName());
-        });
+        boards.stream().filter(board -> board.getName().matches(customConfiguration.getBoardsPattern()))
+                .forEach(board -> {
+                    storiesBoards.add(board);
+                    logger.debug(board.getName());
+                });
         return storiesBoards;
     }
 }

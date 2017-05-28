@@ -39,6 +39,9 @@ public class CustomConfiguration {
     @Value("${trello.access.token}")
     private String accessToken;
 
+    @Value("${trello.boards.pattern}")
+    private String boardsPattern;
+
     @Value("${trello.column.allowed}")
     private String trelloColumnAllowed;
 
@@ -96,6 +99,10 @@ public class CustomConfiguration {
 
     public String getAccessToken() {
         return accessToken;
+    }
+
+    public String getBoardsPattern() {
+        return boardsPattern;
     }
 
     public List<String> getColumnAllowed() {
