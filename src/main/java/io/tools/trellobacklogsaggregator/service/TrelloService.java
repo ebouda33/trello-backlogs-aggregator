@@ -12,6 +12,7 @@ import com.julienvey.trello.domain.Argument;
 import com.julienvey.trello.domain.Board;
 import com.julienvey.trello.domain.TList;
 
+import io.tools.trellobacklogsaggregator.model.BacklogError;
 import io.tools.trellobacklogsaggregator.model.BacklogsData;
 import io.tools.trellobacklogsaggregator.model.BoardDetail;
 import io.tools.trellobacklogsaggregator.model.Sprint;
@@ -38,6 +39,7 @@ public class TrelloService {
 
     public BacklogsData readBacklogs(String organizationId) {
         List<Board> storiesBoards = getBoards(organizationId);
+        List<BacklogError> errors = new ArrayList<>();
 
         List<BoardDetail> storiesDetailedBoards = new ArrayList<>();
         sprint = new Sprint();
@@ -45,7 +47,11 @@ public class TrelloService {
             List<TList> tLists = board.fetchLists();
             detailedBoard = new BoardDetail(board);
 
-            listService.checkListConsistency(tLists);
+            try {
+                listService.checkListConsistency(tLists);
+            } catch (Exception e) {
+                errors.add(new BacklogError(board.getName(), e.getMessage()));
+            }
             tLists.forEach(tList -> {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
@@ -61,6 +67,7 @@ public class TrelloService {
         BacklogsData backlogsData = new BacklogsData();
         backlogsData.setBoards(storiesDetailedBoards);
         backlogsData.setSprint(sprint);
+        backlogsData.setErrors(errors);
         return backlogsData;
     }
 

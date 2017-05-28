@@ -4,14 +4,18 @@
 
 <title>Spring Boot</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="../static/css/custom.css" th:href="@{css/custom.css}" rel="stylesheet" media="screen" />
+<link href="../static/css/custom.css" th:href="@{css/custom.css}"
+    rel="stylesheet" media="screen" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
-    th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+<link
+    href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
+    th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"
+    rel="stylesheet" media="screen" />
 
-<link href="../static/css/guru.css" th:href="@{css/guru.css}" rel="stylesheet" media="screen" />
+<link href="../static/css/guru.css" th:href="@{css/guru.css}"
+    rel="stylesheet" media="screen" />
 </head>
 <div class="container">
     <nav class="navbar navbar-default">
@@ -21,6 +25,20 @@
         </ul>
     </nav>
 
+    <div th:if="${errors.size()>0}">
+        <h2>Errors</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Backlog</th>
+                <th>Message</th>
+            </tr>
+            <tr th:each="error : ${errors}">
+                <td th:text="${error.backlog}" />
+                <td th:text="${error.message}" />
+            </tr>
+        </table>
+    </div>
+    
     <h2>Sprint</h2>
     <table class="table table-striped">
         <tr>
@@ -31,31 +49,40 @@
             <th>Total complexity</th>
         </tr>
         <tr th:each="column : ${sprint.columns}">
-            <td th:text="${column.name}"/>           
-            <td th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(column.consumedComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}"/>
+            <td th:text="${column.name}" />
+            <td
+                th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}" />
+            <td
+                th:text="${#numbers.formatDecimal(column.consumedComplexity, 1, 2)}" />
+            <td
+                th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}" />
+            <td
+                th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}" />
         </tr>
         <tr>
-            <td>TOTAL</td>           
-            <td th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(sprint.consumedComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(sprint.remainedComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(sprint.totalComplexity, 1, 2)}"/>
+            <td>TOTAL</td>
+            <td
+                th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}" />
+            <td
+                th:text="${#numbers.formatDecimal(sprint.consumedComplexity, 1, 2)}" />
+            <td
+                th:text="${#numbers.formatDecimal(sprint.remainedComplexity, 1, 2)}" />
+            <td
+                th:text="${#numbers.formatDecimal(sprint.totalComplexity, 1, 2)}" />
         </tr>
-        
+
     </table>
-    
+
     <h2>User Stories</h2>
-    <table class="table table-striped" th:each="column : ${sprint.columns}">
+    <table class="table table-striped"
+        th:each="column : ${sprint.columns}">
         <tr>
             <th>Status</th>
             <th>Title</th>
         </tr>
         <tr th:each="card : ${column.cards}">
-            <td th:text="${column.name}"/>
-            <td th:text="${card.name}"/>
+            <td th:text="${column.name}" />
+            <td th:text="${card.name}" />
         </tr>
     </table>
 

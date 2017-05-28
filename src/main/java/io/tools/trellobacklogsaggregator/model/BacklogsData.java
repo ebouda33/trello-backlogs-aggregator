@@ -5,6 +5,7 @@ import java.util.List;
 public class BacklogsData {
     private List<BoardDetail> boards;
     private Sprint sprint;
+    private List<BacklogError> errors;
 
     public List<BoardDetail> getBoards() {
         return boards;
@@ -20,6 +21,14 @@ public class BacklogsData {
 
     public void setSprint(Sprint sprint) {
         this.sprint = sprint;
+    }
+
+    public List<BacklogError> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<BacklogError> errors) {
+        this.errors = errors;
     }
 
 }

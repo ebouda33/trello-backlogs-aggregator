@@ -20,22 +20,23 @@ public class ListService {
     @Autowired
     private CustomConfiguration customConfiruration;
 
-    public void checkListConsistency(List<TList> tlists) {
+    public void checkListConsistency(List<TList> tlists) throws Exception {
         Map<String, Boolean> columnExistency = new HashMap<>();
 
-        tlists.forEach(tList -> {
+        for (TList tList : tlists) {
             String listName = tList.getName().toLowerCase();
             if (!customConfiruration.getColumnAllowed().contains(listName)) {
                 logger.error("The list " + listName + " is not allowed by the configuration");
+                throw new Exception("The list " + listName + " is not allowed by the configuration");
             }
             columnExistency.put(listName, true);
-
-        });
+        }
 
         for (String columnAllowed : customConfiruration.getColumnAllowed()) {
             if (columnExistency.get(columnAllowed) == null
                     || columnExistency.get(columnAllowed).equals(Boolean.FALSE)) {
                 logger.error(columnAllowed + " should be in Trello but it does not exist");
+                throw new Exception(columnAllowed + " should be in Trello but it does not exist");
             }
         }
     }

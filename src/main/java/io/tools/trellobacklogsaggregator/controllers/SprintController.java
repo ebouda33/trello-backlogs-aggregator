@@ -38,6 +38,7 @@ public class SprintController {
 
             });
             model.addAttribute("sprint", sprint);
+            model.addAttribute("errors", backlogsRepository.read().getErrors());
         }
         return "sprint";
     }
