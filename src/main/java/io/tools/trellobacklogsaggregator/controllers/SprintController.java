@@ -38,6 +38,11 @@ public class SprintController {
 
             });
             model.addAttribute("sprint", sprint);
+            int totalNbItemsInSprint = 0;
+            for (Column column : sprint.getColumns()) {
+                totalNbItemsInSprint += column.getCards().size();
+            }
+            model.addAttribute("totalNbItemsInSprint", totalNbItemsInSprint);
             model.addAttribute("errors", backlogsRepository.read().getErrors());
         }
         return "sprint";

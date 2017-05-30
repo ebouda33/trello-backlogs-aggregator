@@ -25,6 +25,7 @@
     <table class="table table-striped">
         <tr>
             <th>Name</th>
+            <th>Nb items</th>
             <th>Business complexity</th>
             <th>Consumed complexity</th>
             <th>Remained complexity</th>
@@ -32,6 +33,7 @@
         </tr>
         <tr th:each="column : ${sprint.columns}">
             <td th:text="${column.name}" />
+            <td th:text="${column.cards.size()}" />
             <td
                 th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}" />
             <td
@@ -43,6 +45,7 @@
         </tr>
         <tr>
             <td>TOTAL</td>
+            <td th:text="${totalNbItemsInSprint}"></td>
             <td
                 th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}" />
             <td
