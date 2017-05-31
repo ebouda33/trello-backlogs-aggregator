@@ -13,7 +13,7 @@ import io.tools.trellobacklogsaggregator.model.Sprint;
 import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
 
 @Controller
-public class SprintController {
+public class SprintController extends AbstractController {
 
     @Autowired
     private BacklogsRepository backlogsRepository;
@@ -43,7 +43,7 @@ public class SprintController {
                 totalNbItemsInSprint += column.getCards().size();
             }
             model.addAttribute("totalNbItemsInSprint", totalNbItemsInSprint);
-            model.addAttribute("errors", backlogsRepository.read().getErrors());
+            errorManagement(model);
         }
         return "sprint";
     }

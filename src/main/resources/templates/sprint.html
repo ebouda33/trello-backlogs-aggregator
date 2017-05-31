@@ -6,20 +6,8 @@
 </head>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/menu :: menu"></th:block> /*/-->
-
-    <div th:if="${errors.size()>0}">
-        <h2>Errors</h2>
-        <table class="table table-striped">
-            <tr>
-                <th>Backlog</th>
-                <th>Message</th>
-            </tr>
-            <tr th:each="error : ${errors}">
-                <td th:text="${error.backlog}" />
-                <td th:text="${error.message}" />
-            </tr>
-        </table>
-    </div>
+    
+    <!--/*/ <th:block th:include="fragments/errors :: errors"></th:block> /*/-->
     
     <h2>Sprint</h2>
     <table class="table table-striped">
