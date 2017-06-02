@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.julienvey.trello.domain.Argument;
 import com.julienvey.trello.domain.Board;
-import com.julienvey.trello.domain.Label;
 import com.julienvey.trello.domain.Member;
 import com.julienvey.trello.domain.TList;
 
@@ -48,6 +47,8 @@ public class TrelloService {
     public BacklogsData readBacklogs(String organizationId) {
         List<Board> storiesBoards = getBoards(organizationId);
         List<BacklogError> errors = new ArrayList<>();
+        List<String> releases = new ArrayList<>();
+
         Map<String, Member> members = getMembers(organizationId);
 
         List<BoardDetail> storiesDetailedBoards = new ArrayList<>();
@@ -64,7 +65,11 @@ public class TrelloService {
             }
             tLists.forEach(tList -> {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
-                    detailedBoard = boardService.addCard(detailedBoard, card);
+                    card.getLabels().stream().filter(label -> label.getName().matches(customConfiguration.getReleasesPattern())).forEachOrdered(label -> {
+                        releases.add(label.getName());
+                    });
+
+                    detailedBoard = boardService.addCard(detailedBoard, card, releases);
                     if (listService.checkListInSprint(tList)) {
                         sprint = sprintService.addCard(sprint, tList, card, members);
                     }

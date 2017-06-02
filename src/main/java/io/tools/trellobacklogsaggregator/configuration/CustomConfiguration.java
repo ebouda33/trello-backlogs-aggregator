@@ -48,13 +48,16 @@ public class CustomConfiguration {
     @Value("${trello.column.sprint}")
     private String trelloColumnInSprint;
 
+    @Value("${trello.releases.pattern}")
+    private String releasesPattern;
+
     private List<String> columnAllowed;
     private List<String> columnInSprintAllowed;
 
     @PostConstruct
     private void initColumns() {
-        columnAllowed = parseColumnsField(trelloColumnAllowed);
-        columnInSprintAllowed = parseColumnsField(trelloColumnInSprint);
+        columnAllowed = parseField(trelloColumnAllowed);
+        columnInSprintAllowed = parseField(trelloColumnInSprint);
 
         for (String column : columnInSprintAllowed) {
             if (!columnAllowed.contains(column)) {
@@ -63,14 +66,14 @@ public class CustomConfiguration {
         }
     }
 
-    private List<String> parseColumnsField(String columnToParse) {
-        String[] columnArray = columnToParse.split(",");
-        List<String> columnList = Arrays.asList(columnArray);
-        List<String> columnToReturn = new ArrayList<String>();
-        columnList.forEach(column -> {
-            columnToReturn.add(column.trim().toLowerCase());
+    private List<String> parseField(String fieldsToParse) {
+        String[] fieldArray = fieldsToParse.split(",");
+        List<String> fieldList = Arrays.asList(fieldArray);
+        List<String> fieldToReturn = new ArrayList<String>();
+        fieldList.forEach(field -> {
+            fieldToReturn.add(field.trim().toLowerCase());
         });
-        return columnToReturn;
+        return fieldToReturn;
     }
 
     public String getProxyHost() {
@@ -111,6 +114,10 @@ public class CustomConfiguration {
 
     public List<String> getColumnInSprintAllowed() {
         return columnInSprintAllowed;
+    }
+
+    public String getReleasesPattern() {
+        return releasesPattern;
     }
 
 }
