@@ -40,7 +40,7 @@ public class SprintController extends AbstractController {
             model.addAttribute("sprint", sprint);
             int totalNbItemsInSprint = 0;
             for (Column column : sprint.getColumns()) {
-                totalNbItemsInSprint += column.getCards().size();
+                totalNbItemsInSprint += column.getCardsWithMembers().size();
             }
             model.addAttribute("totalNbItemsInSprint", totalNbItemsInSprint);
             errorManagement(model);

@@ -3,15 +3,13 @@ package io.tools.trellobacklogsaggregator.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.julienvey.trello.domain.Card;
-
 public class Column {
     private String name;
     private Double businessComplexity = 0D;
     private Double consumedComplexity = 0D;
     private Double totalComplexity = 0D;
     private Double remainedComplexity = 0D;
-    private List<Card> cards = new ArrayList<>();
+    private List<CardWithMembers> cardsWithMembers = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -53,12 +51,12 @@ public class Column {
         this.remainedComplexity = remainedComplexity;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public List<CardWithMembers> getCardsWithMembers() {
+        return cardsWithMembers;
     }
 
-    public void addCard(Card card) {
-        this.cards.add(card);
+    public void addCard(CardWithMembers cardWithMembers) {
+        this.cardsWithMembers.add(cardWithMembers);
     }
 
 }

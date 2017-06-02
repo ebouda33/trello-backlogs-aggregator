@@ -1,7 +1,9 @@
 package io.tools.trellobacklogsaggregator.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.julienvey.trello.domain.Argument;
 import com.julienvey.trello.domain.Board;
+import com.julienvey.trello.domain.Label;
+import com.julienvey.trello.domain.Member;
 import com.julienvey.trello.domain.TList;
 
 import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
@@ -44,9 +48,11 @@ public class TrelloService {
     public BacklogsData readBacklogs(String organizationId) {
         List<Board> storiesBoards = getBoards(organizationId);
         List<BacklogError> errors = new ArrayList<>();
+        Map<String, Member> members = getMembers(organizationId);
 
         List<BoardDetail> storiesDetailedBoards = new ArrayList<>();
         sprint = new Sprint();
+        int i = 0;
         for (Board board : storiesBoards) {
             List<TList> tLists = board.fetchLists();
             detailedBoard = new BoardDetail(board);
@@ -60,12 +66,13 @@ public class TrelloService {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
                     if (listService.checkListInSprint(tList)) {
-                        sprint = sprintService.addCard(sprint, tList, card);
+                        sprint = sprintService.addCard(sprint, tList, card, members);
                     }
                 });
             });
 
             storiesDetailedBoards.add(detailedBoard);
+            logger.debug(++i + "/" + storiesBoards.size() + " (" + board.getName() + " OK)");
         }
 
         BacklogsData backlogsData = new BacklogsData();
@@ -75,6 +82,15 @@ public class TrelloService {
         return backlogsData;
     }
 
+    private Map<String, Member> getMembers(String organizationId) {
+        List<Member> membersList = trelloApi.getOrganizationMembers(organizationId);
+        Map<String, Member> members = new HashMap<>();
+        membersList.forEach(member -> {
+            members.put(member.getId(), member);
+        });
+        return members;
+    }
+
     private List<Board> getBoards(String organizationId) {
         Argument fields = new Argument("fields", "name");
         List<Board> boards = trelloApi.getOrganizationBoards(organizationId, fields);
@@ -82,7 +98,6 @@ public class TrelloService {
         boards.stream().filter(board -> board.getName().matches(customConfiguration.getBoardsPattern()))
                 .forEach(board -> {
                     storiesBoards.add(board);
-                    logger.debug(board.getName());
                 });
         return storiesBoards;
     }

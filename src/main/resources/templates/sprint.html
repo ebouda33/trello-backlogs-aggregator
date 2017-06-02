@@ -6,9 +6,9 @@
 </head>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/menu :: menu"></th:block> /*/-->
-    
+
     <!--/*/ <th:block th:include="fragments/errors :: errors"></th:block> /*/-->
-    
+
     <h2>Sprint</h2>
     <table class="table table-striped">
         <tr>
@@ -21,41 +21,38 @@
         </tr>
         <tr th:each="column : ${sprint.columns}">
             <td th:text="${column.name}" />
-            <td th:text="${column.cards.size()}" />
-            <td
-                th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}" />
-            <td
-                th:text="${#numbers.formatDecimal(column.consumedComplexity, 1, 2)}" />
-            <td
-                th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}" />
-            <td
-                th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}" />
+            <td th:text="${column.cardsWithMembers.size()}" />
+            <td th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}" />
+            <td th:text="${#numbers.formatDecimal(column.consumedComplexity, 1, 2)}" />
+            <td th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}" />
+            <td th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}" />
         </tr>
         <tr>
             <td>TOTAL</td>
             <td th:text="${totalNbItemsInSprint}"></td>
-            <td
-                th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}" />
-            <td
-                th:text="${#numbers.formatDecimal(sprint.consumedComplexity, 1, 2)}" />
-            <td
-                th:text="${#numbers.formatDecimal(sprint.remainedComplexity, 1, 2)}" />
-            <td
-                th:text="${#numbers.formatDecimal(sprint.totalComplexity, 1, 2)}" />
+            <td th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}" />
+            <td th:text="${#numbers.formatDecimal(sprint.consumedComplexity, 1, 2)}" />
+            <td th:text="${#numbers.formatDecimal(sprint.remainedComplexity, 1, 2)}" />
+            <td th:text="${#numbers.formatDecimal(sprint.totalComplexity, 1, 2)}" />
         </tr>
 
     </table>
 
     <h2>User Stories</h2>
-    <table class="table table-striped"
-        th:each="column : ${sprint.columns}">
+    <table class="table table-striped" th:each="column : ${sprint.columns}">
         <tr>
             <th>Status</th>
             <th>Title</th>
+            <th>Actor</th>
         </tr>
-        <tr th:each="card : ${column.cards}">
+        <tr th:each="cardwithmembers : ${column.cardsWithMembers}">
             <td th:text="${column.name}" />
-            <td th:text="${card.name}" />
+            <td th:text="${cardwithmembers.card.name}" />
+            <td>
+                <p th:each="member : ${cardwithmembers.members}">
+                    <p th:text="${member.fullName}"/>
+                </p>
+            </td>
         </tr>
     </table>
 
