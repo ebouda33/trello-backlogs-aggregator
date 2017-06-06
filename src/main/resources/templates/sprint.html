@@ -39,25 +39,25 @@
     </table>
 
     <h2>User Stories</h2>
-    <table class="table table-striped" th:each="column : ${sprint.columns}">
+    <table class="table table-striped">
         <tr>
             <th>Status</th>
             <th>Backlog</th>
             <th>Title</th>
             <th>Actor</th>
         </tr>
-        <tr th:each="cardwithmembers : ${column.cardsWithMembers}">
-            <td th:text="${column.name}" />
-            <td th:text="${cardwithmembers.backlogName}" />
-            <td>
-                <a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}"/>
-            </td>
-            <td>
-                <p th:each="member : ${cardwithmembers.members}">
-                    <p th:text="${member.fullName}"/>
-                </p>
-            </td>
-        </tr>
+        <th:block th:if="sprint">
+            <th:block th:each="column : ${sprint.columns}">
+                <tr th:each="cardwithmembers : ${column.cardsWithMembers}">
+                    <td th:text="${column.name}" />
+                    <td th:text="${cardwithmembers.backlogName}" />
+                    <td><a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}" /></td>
+                    <td><th:block th:each="member : ${cardwithmembers.members}">
+                            <p th:text="${member.fullName}" />
+                        </th:block></td>
+                </tr>
+            </th:block>
+        </th:block>
     </table>
 
 </div>
