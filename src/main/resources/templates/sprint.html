@@ -47,7 +47,9 @@
         </tr>
         <tr th:each="cardwithmembers : ${column.cardsWithMembers}">
             <td th:text="${column.name}" />
-            <td th:text="${cardwithmembers.card.name}" />
+            <td>
+                <a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}"/>
+            </td>
             <td>
                 <p th:each="member : ${cardwithmembers.members}">
                     <p th:text="${member.fullName}"/>
