@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.julienvey.trello.domain.Argument;
 import com.julienvey.trello.domain.Board;
-import com.julienvey.trello.domain.Label;
 import com.julienvey.trello.domain.Member;
 import com.julienvey.trello.domain.TList;
 
@@ -66,7 +65,7 @@ public class TrelloService {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
                     if (listService.checkListInSprint(tList)) {
-                        sprint = sprintService.addCard(sprint, tList, card, members);
+                        sprint = sprintService.addCard(sprint, tList, card, members, board.getName());
                     }
                 });
             });

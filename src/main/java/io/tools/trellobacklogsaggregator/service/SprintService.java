@@ -21,7 +21,7 @@ public class SprintService {
     @Autowired
     private CardService cardService;
 
-    public Sprint addCard(Sprint sprint, TList list, Card card, Map<String, Member> possibleMembers) {
+    public Sprint addCard(Sprint sprint, TList list, Card card, Map<String, Member> possibleMembers, String backlogName) {
         Column column = null;
         String listName = list.getName();
         for (int i = 0; i < sprint.getColumns().size(); i++) {
@@ -38,7 +38,7 @@ public class SprintService {
             sprint.addColumn(column);
         }
 
-        column.addCard(createCardWithMembers(card, possibleMembers));
+        column.addCard(createCardWithMembers(card, possibleMembers, backlogName));
 
         Double cardBusinessComplexity = cardService.getBusinessComplexity(card);
         Double cardConsumedComplexity = cardService.getConsumedComplexity(card);
@@ -56,11 +56,11 @@ public class SprintService {
         return sprint;
     }
 
-    private CardWithMembers createCardWithMembers(Card card, Map<String, Member> possibleMembers) {
+    private CardWithMembers createCardWithMembers(Card card, Map<String, Member> possibleMembers, String backlogName) {
         List<Member> cardMembers = new ArrayList<>();
         card.getIdMembers().forEach(idMember -> {
             cardMembers.add(possibleMembers.get(idMember));
         });
-        return new CardWithMembers(card, cardMembers);
+        return new CardWithMembers(card, cardMembers, backlogName);
     }
 }

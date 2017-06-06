@@ -42,11 +42,13 @@
     <table class="table table-striped" th:each="column : ${sprint.columns}">
         <tr>
             <th>Status</th>
+            <th>Backlog</th>
             <th>Title</th>
             <th>Actor</th>
         </tr>
         <tr th:each="cardwithmembers : ${column.cardsWithMembers}">
             <td th:text="${column.name}" />
+            <td th:text="${cardwithmembers.backlogName}" />
             <td>
                 <a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}"/>
             </td>
