@@ -1,7 +1,5 @@
 package io.tools.trellobacklogsaggregator.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.domain.Member;
 import com.julienvey.trello.domain.TList;
 
-import io.tools.trellobacklogsaggregator.model.CardWithMembers;
 import io.tools.trellobacklogsaggregator.model.Column;
 import io.tools.trellobacklogsaggregator.model.Sprint;
 
@@ -38,7 +35,7 @@ public class SprintService {
             sprint.addColumn(column);
         }
 
-        column.addCard(createCardWithMembers(card, possibleMembers, backlogName));
+        column.addCard(cardService.createCardWithMembers(card, possibleMembers, backlogName));
 
         Double cardBusinessComplexity = cardService.getBusinessComplexity(card);
         Double cardConsumedComplexity = cardService.getConsumedComplexity(card);
@@ -56,11 +53,4 @@ public class SprintService {
         return sprint;
     }
 
-    private CardWithMembers createCardWithMembers(Card card, Map<String, Member> possibleMembers, String backlogName) {
-        List<Member> cardMembers = new ArrayList<>();
-        card.getIdMembers().forEach(idMember -> {
-            cardMembers.add(possibleMembers.get(idMember));
-        });
-        return new CardWithMembers(card, cardMembers, backlogName);
-    }
 }

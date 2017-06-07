@@ -48,13 +48,18 @@ public class CustomConfiguration {
     @Value("${trello.column.sprint}")
     private String trelloColumnInSprint;
 
+    @Value("${trello.column.readytodeliver}")
+    private String trelloColumnReadyToDeliver;
+
     private List<String> columnAllowed;
     private List<String> columnInSprintAllowed;
+    private List<String> columnReadyToDeliverAllowed;
 
     @PostConstruct
     private void initColumns() {
         columnAllowed = parseColumnsField(trelloColumnAllowed);
         columnInSprintAllowed = parseColumnsField(trelloColumnInSprint);
+        columnReadyToDeliverAllowed = parseColumnsField(trelloColumnReadyToDeliver);
 
         for (String column : columnInSprintAllowed) {
             if (!columnAllowed.contains(column)) {
@@ -111,6 +116,10 @@ public class CustomConfiguration {
 
     public List<String> getColumnInSprintAllowed() {
         return columnInSprintAllowed;
+    }
+
+    public List<String> getColumnReadyToDeliverAllowed() {
+        return columnReadyToDeliverAllowed;
     }
 
 }

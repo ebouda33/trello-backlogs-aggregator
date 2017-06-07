@@ -19,6 +19,7 @@ import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
 import io.tools.trellobacklogsaggregator.model.BacklogError;
 import io.tools.trellobacklogsaggregator.model.BacklogsData;
 import io.tools.trellobacklogsaggregator.model.BoardDetail;
+import io.tools.trellobacklogsaggregator.model.CardWithMembers;
 import io.tools.trellobacklogsaggregator.model.Sprint;
 
 @Service
@@ -37,6 +38,9 @@ public class TrelloService {
     private SprintService sprintService;
 
     @Autowired
+    private CardService cardService;
+
+    @Autowired
     private CustomConfiguration customConfiguration;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -46,8 +50,9 @@ public class TrelloService {
 
     public BacklogsData readBacklogs(String organizationId) {
         List<Board> storiesBoards = getBoards(organizationId);
-        List<BacklogError> errors = new ArrayList<>();
         Map<String, Member> members = getMembers(organizationId);
+        List<CardWithMembers> cardsWithMembersReadyToDeliver = new ArrayList<>();
+        List<BacklogError> errors = new ArrayList<>();
 
         List<BoardDetail> storiesDetailedBoards = new ArrayList<>();
         sprint = new Sprint();
@@ -64,8 +69,11 @@ public class TrelloService {
             tLists.forEach(tList -> {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
-                    if (listService.checkListInSprint(tList)) {
+                    if (listService.checkListAllowed(tList, customConfiguration.getColumnInSprintAllowed())) {
                         sprint = sprintService.addCard(sprint, tList, card, members, board.getName());
+                    }
+                    if (listService.checkListAllowed(tList, customConfiguration.getColumnReadyToDeliverAllowed())) {
+                        cardsWithMembersReadyToDeliver.add(cardService.createCardWithMembers(card, members, board.getName()));
                     }
                 });
             });
@@ -77,6 +85,7 @@ public class TrelloService {
         BacklogsData backlogsData = new BacklogsData();
         backlogsData.setBoards(storiesDetailedBoards);
         backlogsData.setSprint(sprint);
+        backlogsData.setCardsWithMembersReadyToDeliver(cardsWithMembersReadyToDeliver);
         backlogsData.setErrors(errors);
         return backlogsData;
     }
