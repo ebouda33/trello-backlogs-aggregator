@@ -17,19 +17,17 @@
     <div class="container">
         <div th:fragment="errors">
             <div th:if="errors">
-                <div th:if="${errors.size()>0}">
-                    <h2>Errors</h2>
-                    <table class="table table-striped">
-                        <tr>
-                            <th>Backlog</th>
-                            <th>Message</th>
-                        </tr>
-                        <tr th:each="error : ${errors}">
-                            <td th:text="${error.backlog}" />
-                            <td th:text="${error.message}" />
-                        </tr>
-                    </table>
-                </div>
+                <h2>Errors</h2>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Backlog</th>
+                        <th>Message</th>
+                    </tr>
+                    <tr th:each="error : ${errors}">
+                        <td th:text="${error.backlog}" />
+                        <td th:text="${error.message}" />
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

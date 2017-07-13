@@ -1,8 +1,15 @@
 package io.tools.trellobacklogsaggregator.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.julienvey.trello.domain.Card;
+import com.julienvey.trello.domain.Member;
+
+import io.tools.trellobacklogsaggregator.model.CardWithMembers;
 
 @Service
 public class CardService {
@@ -55,5 +62,13 @@ public class CardService {
             }
         }
         return value;
+    }
+
+    public CardWithMembers createCardWithMembers(Card card, Map<String, Member> possibleMembers, String backlogName) {
+        List<Member> cardMembers = new ArrayList<>();
+        card.getIdMembers().forEach(idMember -> {
+            cardMembers.add(possibleMembers.get(idMember));
+        });
+        return new CardWithMembers(card, cardMembers, backlogName);
     }
 }

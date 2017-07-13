@@ -51,13 +51,18 @@ public class CustomConfiguration {
     @Value("${trello.releases.pattern}")
     private String releasesPattern;
 
+    @Value("${trello.column.readytodeliver}")
+    private String trelloColumnReadyToDeliver;
+
     private List<String> columnAllowed;
     private List<String> columnInSprintAllowed;
+    private List<String> columnReadyToDeliverAllowed;
 
     @PostConstruct
     private void initColumns() {
         columnAllowed = parseField(trelloColumnAllowed);
         columnInSprintAllowed = parseField(trelloColumnInSprint);
+        columnReadyToDeliverAllowed = parseField(trelloColumnReadyToDeliver);
 
         for (String column : columnInSprintAllowed) {
             if (!columnAllowed.contains(column)) {
@@ -118,6 +123,10 @@ public class CustomConfiguration {
 
     public String getReleasesPattern() {
         return releasesPattern;
+    }
+
+    public List<String> getColumnReadyToDeliverAllowed() {
+        return columnReadyToDeliverAllowed;
     }
 
 }

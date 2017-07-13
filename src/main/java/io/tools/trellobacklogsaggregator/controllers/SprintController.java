@@ -37,7 +37,9 @@ public class SprintController extends AbstractController {
                 }
 
             });
-            model.addAttribute("sprint", sprint);
+            if (sprint != null) {
+                model.addAttribute("sprint", sprint);
+            }
             int totalNbItemsInSprint = 0;
             for (Column column : sprint.getColumns()) {
                 totalNbItemsInSprint += column.getCardsWithMembers().size();

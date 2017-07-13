@@ -41,14 +41,8 @@ public class ListService {
         }
     }
 
-    public boolean checkListInSprint(TList tlist) {
-        boolean inSprint = false;
-
-        String listName = tlist.getName().toLowerCase();
-        if (customConfiruration.getColumnInSprintAllowed().contains(listName)) {
-            inSprint = true;
-        }
-
-        return inSprint;
+    public boolean checkListAllowed(TList tlist, List<String> listNameAllowed) {
+        return listNameAllowed.contains(tlist.getName().toLowerCase());
     }
+
 }
