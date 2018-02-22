@@ -7,9 +7,9 @@ import com.julienvey.trello.impl.TrelloImpl;
 
 @Service
 public class TrelloApi extends TrelloImpl {
-    
+
     public TrelloApi(@Value("${trello.application.key}") String applicationKey, @Value("${trello.access.token}") String accessToken) {
         super(applicationKey, accessToken);
     }
-    
+
 }

@@ -34,10 +34,12 @@ public class ProxyConfiguration {
                     }
                 });
 
-                System.setProperty("http.proxyUser", authUser);
-                System.setProperty("http.proxyPassword", authPassword);
-                System.setProperty("https.proxyUser", authUser);
-                System.setProperty("https.proxyPassword", authPassword);
+                props.put("jdk.http.auth.tunneling.disabledSchemes", "");
+
+                props.put("http.proxyUser", authUser);
+                props.put("http.proxyPassword", authPassword);
+                props.put("https.proxyUser", authUser);
+                props.put("https.proxyPassword", authPassword);
             }
         }
 
