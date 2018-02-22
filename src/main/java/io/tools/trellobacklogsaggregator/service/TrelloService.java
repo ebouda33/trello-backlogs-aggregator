@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.julienvey.trello.domain.Argument;
 import com.julienvey.trello.domain.Board;
+import com.julienvey.trello.domain.Label;
 import com.julienvey.trello.domain.Member;
 import com.julienvey.trello.domain.TList;
 
@@ -59,6 +60,7 @@ public class TrelloService {
         int i = 0;
         for (Board board : storiesBoards) {
             List<TList> tLists = board.fetchLists();
+            List<Label> boardLabels = trelloApi.getBoardLabels(board.getId());
             detailedBoard = new BoardDetail(board);
 
             try {
@@ -70,7 +72,7 @@ public class TrelloService {
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
                     if (listService.checkListAllowed(tList, customConfiguration.getColumnInSprintAllowed())) {
-                        sprint = sprintService.addCard(sprint, tList, card, members, board.getName());
+                        sprint = sprintService.addCard(sprint, tList, card, members, boardLabels, board.getName());
                     }
                     if (listService.checkListAllowed(tList, customConfiguration.getColumnReadyToDeliverAllowed())) {
                         cardsWithMembersReadyToDeliver.add(cardService.createCardWithMembers(card, members, board.getName()));

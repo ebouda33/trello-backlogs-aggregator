@@ -19,7 +19,8 @@
             <th>Remained complexity</th>
             <th>Total complexity</th>
         </tr>
-        <tr th:each="column : ${sprint.columns}">
+        <th:block th:each="column : ${sprint.columns}">
+        <tr>
             <td th:text="${column.name}" />
             <td th:text="${column.cardsWithMembers.size()}" />
             <td th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}" />
@@ -27,6 +28,15 @@
             <td th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}" />
             <td th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}" />
         </tr>
+        <tr th:each="columnLabel : ${column.columnLabels}">
+            <td><small class="text-info" th:text="${columnLabel.label.name}" ></small></td>
+            <td></td>
+            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.businessComplexity, 1, 2)}" ></small></td>
+            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.consumedComplexity, 1, 2)}" ></small></td>
+            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.remainedComplexity, 1, 2)}" ></small></td>
+            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.totalComplexity, 1, 2)}" ></small></td>
+        </tr>
+        </th:block>
         <tr>
             <td>TOTAL</td>
             <td th:text="${totalNbItemsInSprint}"></td>

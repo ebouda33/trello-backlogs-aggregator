@@ -1,31 +1,24 @@
 package io.tools.trellobacklogsaggregator.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.julienvey.trello.domain.Label;
 
-public class Column {
-    private String name;
+public class ColumnLabel {
+    private Label label;
     private Double businessComplexity = 0D;
     private Double consumedComplexity = 0D;
     private Double totalComplexity = 0D;
     private Double remainedComplexity = 0D;
-    private List<CardWithMembers> cardsWithMembers = new ArrayList<>();
-    private List<ColumnLabel> columnLabels = new ArrayList<>();
 
-    public String getName() {
-        return name;
+    public ColumnLabel(Label label) {
+        this.label = label;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Label getLabel() {
+        return label;
     }
 
-    public List<ColumnLabel> getColumnLabels() {
-        return columnLabels;
-    }
-
-    public void addColumnLabel(ColumnLabel columnLabel) {
-        this.columnLabels.add(columnLabel);
+    public void setLabel(Label label) {
+        this.label = label;
     }
 
     public Double getBusinessComplexity() {
@@ -58,14 +51,6 @@ public class Column {
 
     public void setRemainedComplexity(Double remainedComplexity) {
         this.remainedComplexity = remainedComplexity;
-    }
-
-    public List<CardWithMembers> getCardsWithMembers() {
-        return cardsWithMembers;
-    }
-
-    public void addCard(CardWithMembers cardWithMembers) {
-        this.cardsWithMembers.add(cardWithMembers);
     }
 
 }
