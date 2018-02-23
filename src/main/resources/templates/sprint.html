@@ -28,9 +28,9 @@
             <td th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}" />
             <td th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}" />
         </tr>
-        <tr th:each="columnLabel : ${column.columnLabels}">
+        <tr th:each="columnLabel : ${#lists.sort(column.columnLabels, columnLabelComparator)}">
             <td><small class="text-info" th:text="${columnLabel.label.name}" ></small></td>
-            <td></td>
+            <td><small class="text-info" th:text="${columnLabel.cardsWithMembers.size()}" ></small></td>
             <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.businessComplexity, 1, 2)}" ></small></td>
             <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.consumedComplexity, 1, 2)}" ></small></td>
             <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.remainedComplexity, 1, 2)}" ></small></td>

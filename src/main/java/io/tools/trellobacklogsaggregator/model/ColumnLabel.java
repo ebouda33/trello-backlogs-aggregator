@@ -1,5 +1,8 @@
 package io.tools.trellobacklogsaggregator.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.julienvey.trello.domain.Label;
 
 public class ColumnLabel {
@@ -8,6 +11,7 @@ public class ColumnLabel {
     private Double consumedComplexity = 0D;
     private Double totalComplexity = 0D;
     private Double remainedComplexity = 0D;
+    private List<CardWithMembers> cardsWithMembers = new ArrayList<>();
 
     public ColumnLabel(Label label) {
         this.label = label;
@@ -53,4 +57,11 @@ public class ColumnLabel {
         this.remainedComplexity = remainedComplexity;
     }
 
+    public List<CardWithMembers> getCardsWithMembers() {
+        return cardsWithMembers;
+    }
+
+    public void addCard(CardWithMembers cardWithMembers) {
+        this.cardsWithMembers.add(cardWithMembers);
+    }
 }

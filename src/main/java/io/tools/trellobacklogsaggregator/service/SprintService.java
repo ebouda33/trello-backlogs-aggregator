@@ -11,6 +11,7 @@ import com.julienvey.trello.domain.Label;
 import com.julienvey.trello.domain.Member;
 import com.julienvey.trello.domain.TList;
 
+import io.tools.trellobacklogsaggregator.model.CardWithMembers;
 import io.tools.trellobacklogsaggregator.model.Column;
 import io.tools.trellobacklogsaggregator.model.ColumnLabel;
 import io.tools.trellobacklogsaggregator.model.Sprint;
@@ -24,7 +25,8 @@ public class SprintService {
     public Sprint addCard(Sprint sprint, TList list, Card card, Map<String, Member> possibleMembers, List<Label> possibleLabels, String backlogName) {
         Column column = getColumnByListName(sprint, list);
 
-        column.addCard(cardService.createCardWithMembers(card, possibleMembers, backlogName));
+        CardWithMembers cardWithMembers = cardService.createCardWithMembers(card, possibleMembers, backlogName);
+        column.addCard(cardWithMembers);
 
         Double cardBusinessComplexity = cardService.getBusinessComplexity(card);
         Double cardConsumedComplexity = cardService.getConsumedComplexity(card);
@@ -39,6 +41,7 @@ public class SprintService {
             columnLabel.setConsumedComplexity(columnLabel.getConsumedComplexity() + cardConsumedComplexity);
             columnLabel.setTotalComplexity(columnLabel.getTotalComplexity() + cardTotalComplexity);
             columnLabel.setRemainedComplexity(columnLabel.getTotalComplexity() - columnLabel.getConsumedComplexity());
+            columnLabel.addCard(cardWithMembers);
         }
 
         column.setBusinessComplexity(column.getBusinessComplexity() + cardBusinessComplexity);
