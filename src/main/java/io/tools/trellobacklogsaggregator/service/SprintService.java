@@ -22,7 +22,7 @@ public class SprintService {
     @Autowired
     private CardService cardService;
 
-    public Sprint addCard(Sprint sprint, TList list, Card card, Map<String, Member> possibleMembers, List<Label> possibleLabels, String backlogName) {
+    public Sprint addCard(Sprint sprint, TList list, Card card, Map<String, Member> possibleMembers, String backlogName) {
         Column column = getColumnByListName(sprint, list);
 
         CardWithMembers cardWithMembers = cardService.createCardWithMembers(card, possibleMembers, backlogName);
@@ -58,20 +58,11 @@ public class SprintService {
 
     private ColumnLabel getColumnLabelFromCardLabel(Column column, Label cardLabel) {
         ColumnLabel columnLabel = null;
-        if (column.getColumnLabels().isEmpty()) {
-            columnLabel = new ColumnLabel(cardLabel);
-            column.addColumnLabel(columnLabel);
-        } else {
-            for (int j = 0; j < column.getColumnLabels().size(); j++) {
-                String columnLabelName = column.getColumnLabels().get(j).getLabel().getName();
-                if (columnLabelName.equals(cardLabel.getName())) {
-                    columnLabel = column.getColumnLabels().get(j);
-                    break;
-                }
-            }
-            if (columnLabel == null) {
-                columnLabel = new ColumnLabel(cardLabel);
-                column.addColumnLabel(columnLabel);
+        for (int j = 0; j < column.getColumnLabels().size(); j++) {
+            String columnLabelName = column.getColumnLabels().get(j).getLabel().getName();
+            if (columnLabelName.equals(cardLabel.getName())) {
+                columnLabel = column.getColumnLabels().get(j);
+                break;
             }
         }
         return columnLabel;
@@ -88,12 +79,18 @@ public class SprintService {
                 break;
             }
         }
-        if (column == null) {
-            column = new Column();
-            column.setName(listName);
-            sprint.addColumn(column);
-        }
         return column;
+    }
+
+    public Sprint addColumn(Sprint sprint, TList list, List<Label> possibleLabels) {
+        String listName = list.getName();
+        Column column = new Column();
+        column.setName(listName);
+        for (Label label : possibleLabels) {
+            column.addColumnLabel(new ColumnLabel(label));
+        }
+        sprint.addColumn(column);
+        return sprint;
     }
 
 }

@@ -69,10 +69,13 @@ public class TrelloService {
                 errors.add(new BacklogError(board.getName(), e.getMessage()));
             }
             tLists.forEach(tList -> {
+                if (listService.checkListAllowed(tList, customConfiguration.getColumnInSprintAllowed())) {
+                    sprint = sprintService.addColumn(sprint, tList, boardLabels);
+                }
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
                     if (listService.checkListAllowed(tList, customConfiguration.getColumnInSprintAllowed())) {
-                        sprint = sprintService.addCard(sprint, tList, card, members, boardLabels, board.getName());
+                        sprint = sprintService.addCard(sprint, tList, card, members, board.getName());
                     }
                     if (listService.checkListAllowed(tList, customConfiguration.getColumnReadyToDeliverAllowed())) {
                         cardsWithMembersReadyToDeliver.add(cardService.createCardWithMembers(card, members, board.getName()));
