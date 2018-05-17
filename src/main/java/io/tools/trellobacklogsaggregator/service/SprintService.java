@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.domain.Label;
 import com.julienvey.trello.domain.Member;
-import com.julienvey.trello.domain.TList;
 
 import io.tools.trellobacklogsaggregator.model.CardWithMembers;
 import io.tools.trellobacklogsaggregator.model.Column;
@@ -22,8 +21,8 @@ public class SprintService {
     @Autowired
     private CardService cardService;
 
-    public Sprint addCard(Sprint sprint, TList list, Card card, Map<String, Member> possibleMembers, String backlogName) {
-        Column column = getColumnByListName(sprint, list);
+    public Sprint addCard(Sprint sprint, String listName, Card card, Map<String, Member> possibleMembers, String backlogName) {
+        Column column = getColumnByListName(sprint, listName);
 
         CardWithMembers cardWithMembers = cardService.createCardWithMembers(card, possibleMembers, backlogName);
         column.addCard(cardWithMembers);
@@ -68,9 +67,8 @@ public class SprintService {
         return columnLabel;
     }
 
-    private Column getColumnByListName(Sprint sprint, TList list) {
+    private Column getColumnByListName(Sprint sprint, String listName) {
         Column column = null;
-        String listName = list.getName();
         for (int i = 0; i < sprint.getColumns().size(); i++) {
             Column columnInSprint = sprint.getColumns().get(i);
             String columnInSprintName = columnInSprint.getName();
@@ -82,8 +80,7 @@ public class SprintService {
         return column;
     }
 
-    public Sprint addColumn(Sprint sprint, TList list, List<Label> possibleLabels) {
-        String listName = list.getName();
+    public Sprint addColumn(Sprint sprint, String listName, List<Label> possibleLabels) {
         Column column = new Column();
         column.setName(listName);
         for (Label label : possibleLabels) {

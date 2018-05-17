@@ -58,6 +58,7 @@ public class TrelloService {
         List<BoardDetail> storiesDetailedBoards = new ArrayList<>();
         sprint = new Sprint();
         int i = 0;
+
         for (Board board : storiesBoards) {
             List<TList> tLists = board.fetchLists();
             List<Label> boardLabels = trelloApi.getBoardLabels(board.getId());
@@ -69,15 +70,19 @@ public class TrelloService {
                 errors.add(new BacklogError(board.getName(), e.getMessage()));
             }
             tLists.forEach(tList -> {
-                if (listService.checkListAllowed(tList, customConfiguration.getColumnInSprintAllowed())) {
-                    sprint = sprintService.addColumn(sprint, tList, boardLabels);
+                String listName = tList.getName();
+                if (listService.checkListAllowed(listName, customConfiguration.getColumnInSprintAllowed())) {
+                    sprint = sprintService.addColumn(sprint, listName, boardLabels);
                 }
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
-                    if (listService.checkListAllowed(tList, customConfiguration.getColumnInSprintAllowed())) {
-                        sprint = sprintService.addCard(sprint, tList, card, members, board.getName());
+
+                    if (listService.checkListAllowed(listName, customConfiguration.getColumnInSprintAllowed())) {
+                        sprint = sprintService.addCard(sprint, listName, card, members, board.getName());
+                    } else if (listService.checkListAllowed(listName, customConfiguration.getColumnDeliveredAllAllowed())) {
+                        sprint = sprintService.addCard(sprint, customConfiguration.getTrelloColumnDeliveredTotal(), card, members, board.getName());
                     }
-                    if (listService.checkListAllowed(tList, customConfiguration.getColumnReadyToDeliverAllowed())) {
+                    if (listService.checkListAllowed(listName, customConfiguration.getColumnReadyToDeliverAllowed())) {
                         cardsWithMembersReadyToDeliver.add(cardService.createCardWithMembers(card, members, board.getName()));
                     }
                 });

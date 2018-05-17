@@ -51,17 +51,25 @@ public class CustomConfiguration {
     @Value("${trello.column.readytodeliver}")
     private String trelloColumnReadyToDeliver;
 
+    @Value("${trello.column.delivered.all}")
+    private String trelloColumnDeliveredAll;
+
+    @Value("${trello.column.delivered.total}")
+    private String trelloColumnDeliveredTotal;
+
     private List<String> columnAllowed;
     private List<String> columnInSprintAllowed;
     private List<String> columnReadyToDeliverAllowed;
+    private List<String> columnDeliveredAllAllowed;
 
     @PostConstruct
     private void initColumns() {
         columnAllowed = parseColumnsField(trelloColumnAllowed);
         columnInSprintAllowed = parseColumnsField(trelloColumnInSprint);
         columnReadyToDeliverAllowed = parseColumnsField(trelloColumnReadyToDeliver);
+        columnDeliveredAllAllowed = parseColumnsField(trelloColumnDeliveredAll);
 
-        for (String column : columnInSprintAllowed) {
+        for (String column : columnAllowed) {
             if (!columnAllowed.contains(column)) {
                 logger.error(column + " is not allowed by the configuration");
             }
@@ -122,4 +130,11 @@ public class CustomConfiguration {
         return columnReadyToDeliverAllowed;
     }
 
+    public List<String> getColumnDeliveredAllAllowed() {
+        return columnDeliveredAllAllowed;
+    }
+
+    public String getTrelloColumnDeliveredTotal() {
+        return trelloColumnDeliveredTotal;
+    }
 }

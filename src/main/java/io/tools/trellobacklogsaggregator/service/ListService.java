@@ -41,8 +41,8 @@ public class ListService {
         }
     }
 
-    public boolean checkListAllowed(TList tlist, List<String> listNameAllowed) {
-        return listNameAllowed.contains(tlist.getName().toLowerCase());
+    public boolean checkListAllowed(String listName, List<String> listNameAllowed) {
+        return listNameAllowed.contains(listName.toLowerCase());
     }
 
 }
