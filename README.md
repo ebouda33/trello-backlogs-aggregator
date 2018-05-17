@@ -29,9 +29,12 @@ trello.access.token=3a04878454def84d8e4g0ef4g8f7h7g4hrs4f7hz89fvh94f8dvh4z87grj1
 
 trello.boards.pattern=^Backlog[A-Za-z0-9/é'èêàôù _()\\-]*  #To analyse all boards which name starts with 'Backlog'	
 
-trello.column.allowed=Ideas, Writing in progress, User stories ready, To do, In progress, Done in sprint, Q&A, Ready To production, Done in production
+trello.column.allowed=Ideas, Writing in progress, User stories ready, To do, In progress, Done in sprint, Q&A, Ready To production, Done in production,0.2.0,0.1.0,0.0.2,0.0.1
 trello.column.sprint=To do, In progress, Done in sprint
 trello.column.readytodeliver=Ready To production
+trello.column.delivered.all=Done in production,0.2.0,0.1.0,0.0.2,0.0.1
+trello.column.delivered.total=Done in production
+
 
 batch.frequency=0 * * * * *
 ```
