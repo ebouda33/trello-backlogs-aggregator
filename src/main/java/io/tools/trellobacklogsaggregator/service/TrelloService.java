@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,7 @@ public class TrelloService {
         for (Board board : storiesBoards) {
             List<TList> tLists = board.fetchLists();
             List<Label> boardLabels = trelloApi.getBoardLabels(board.getId());
+            List<Label> boardLabelsWithoutStock = boardLabels.stream().filter(label -> !"Stock".equals(label.getName())).collect(Collectors.toList());
             detailedBoard = new BoardDetail(board);
 
             try {
@@ -72,7 +74,7 @@ public class TrelloService {
             tLists.forEach(tList -> {
                 String listName = tList.getName();
                 if (listService.checkListAllowed(listName, customConfiguration.getColumnInSprintAllowed())) {
-                    sprint = sprintService.addColumn(sprint, listName, boardLabels);
+                    sprint = sprintService.addColumn(sprint, listName, boardLabelsWithoutStock);
                 }
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);

@@ -31,16 +31,28 @@ public class SprintService {
         Double cardConsumedComplexity = cardService.getConsumedComplexity(card);
         Double cardTotalComplexity = cardService.getTotalComplexity(card);
 
+        if (hasStockLabel(card)) {
+            for (int i = 0; i < cardBusinessComplexity - 1; i++) {
+                column.addCard(cardWithMembers);
+            }
+        }
+
         List<Label> cardLabels = card.getLabels();
 
         for (int i = 0; i < cardLabels.size(); i++) {
             ColumnLabel columnLabel = getColumnLabelFromCardLabel(column, cardLabels.get(i));
 
-            columnLabel.setBusinessComplexity(columnLabel.getBusinessComplexity() + cardBusinessComplexity);
-            columnLabel.setConsumedComplexity(columnLabel.getConsumedComplexity() + cardConsumedComplexity);
-            columnLabel.setTotalComplexity(columnLabel.getTotalComplexity() + cardTotalComplexity);
-            columnLabel.setRemainedComplexity(columnLabel.getTotalComplexity() - columnLabel.getConsumedComplexity());
-            columnLabel.addCard(cardWithMembers);
+            if (columnLabel != null) {
+                columnLabel.setBusinessComplexity(columnLabel.getBusinessComplexity() + cardBusinessComplexity);
+                columnLabel.setConsumedComplexity(columnLabel.getConsumedComplexity() + cardConsumedComplexity);
+                columnLabel.setTotalComplexity(columnLabel.getTotalComplexity() + cardTotalComplexity);
+                columnLabel.setRemainedComplexity(columnLabel.getTotalComplexity() - columnLabel.getConsumedComplexity());
+                if (hasStockLabel(card)) {
+                    for (int k = 0; k < cardBusinessComplexity - 1; k++) {
+                        columnLabel.addCard(cardWithMembers);
+                    }
+                }
+            }
         }
 
         column.setBusinessComplexity(column.getBusinessComplexity() + cardBusinessComplexity);
@@ -53,6 +65,10 @@ public class SprintService {
         sprint.setTotalComplexity(sprint.getTotalComplexity() + cardTotalComplexity);
         sprint.setRemainedComplexity(sprint.getTotalComplexity() - sprint.getConsumedComplexity());
         return sprint;
+    }
+
+    private boolean hasStockLabel(Card card) {
+        return card.getLabels().stream().filter(label -> "Stock".equals(label.getName())).count() > 0;
     }
 
     private ColumnLabel getColumnLabelFromCardLabel(Column column, Label cardLabel) {
