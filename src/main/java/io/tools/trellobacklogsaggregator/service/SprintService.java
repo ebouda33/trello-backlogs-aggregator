@@ -47,6 +47,7 @@ public class SprintService {
                 columnLabel.setConsumedComplexity(columnLabel.getConsumedComplexity() + cardConsumedComplexity);
                 columnLabel.setTotalComplexity(columnLabel.getTotalComplexity() + cardTotalComplexity);
                 columnLabel.setRemainedComplexity(columnLabel.getTotalComplexity() - columnLabel.getConsumedComplexity());
+                columnLabel.addCard(cardWithMembers);
                 if (hasStockLabel(card)) {
                     for (int k = 0; k < cardBusinessComplexity - 1; k++) {
                         columnLabel.addCard(cardWithMembers);
