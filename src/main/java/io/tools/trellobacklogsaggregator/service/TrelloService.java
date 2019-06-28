@@ -63,7 +63,8 @@ public class TrelloService {
         for (Board board : storiesBoards) {
             List<TList> tLists = board.fetchLists();
             List<Label> boardLabels = trelloApi.getBoardLabels(board.getId());
-            List<Label> boardLabelsWithoutStock = boardLabels.stream().filter(label -> !"Stock".equals(label.getName())).collect(Collectors.toList());
+            List<Label> boardCardTypeLabels = boardLabels.stream().filter(label -> (!"Stock".equals(label.getName()) && !"Hotfix".equals(label.getName())))
+                    .collect(Collectors.toList());
             detailedBoard = new BoardDetail(board);
 
             try {
@@ -74,7 +75,7 @@ public class TrelloService {
             tLists.forEach(tList -> {
                 String listName = tList.getName();
                 if (listService.checkListAllowed(listName, customConfiguration.getColumnInSprintAllowed())) {
-                    sprint = sprintService.addColumn(sprint, listName, boardLabelsWithoutStock);
+                    sprint = sprintService.addColumn(sprint, listName, boardCardTypeLabels);
                 }
                 trelloApi.getListCards(tList.getId()).forEach(card -> {
                     detailedBoard = boardService.addCard(detailedBoard, card);
