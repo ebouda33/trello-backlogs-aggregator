@@ -1,6 +1,12 @@
 package io.tools.trellobacklogsaggregator.model;
 
 import com.julienvey.trello.domain.Board;
+import com.julienvey.trello.domain.Card;
+import io.tools.trellobacklogsaggregator.execptions.ListException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class BoardDetail {
     private String name;
@@ -8,9 +14,32 @@ public class BoardDetail {
     private Double consumedComplexity = 0D;
     private Double remainedComplexity = 0D;
     private Double totalComplexity = 0D;
+    private Board source;
+    private List<ListByLabel> listsByLabel;
 
     public BoardDetail(Board board) {
+        this.source = board;
         this.setName(board.getName());
+        listsByLabel = new ArrayList<>();
+    }
+
+    public void createList(String label){
+        if(!getListByLabel(label).isPresent()){
+            listsByLabel.add(new ListByLabel(label));
+        }
+    }
+
+    public List<ListByLabel> getListsByLabel() {
+        return listsByLabel;
+    }
+
+    public void addCard(Card card, String label){
+        final ListByLabel listByLabel1 = getListByLabel(label).orElseThrow(ListException::new);
+        listByLabel1.addCard(card);
+    }
+
+    public Optional<ListByLabel> getListByLabel(String label) {
+        return listsByLabel.stream().filter(listByLabel -> listByLabel.getName().equalsIgnoreCase(label)).findFirst();
     }
 
     public Double getBusinessComplexity() {
@@ -53,4 +82,7 @@ public class BoardDetail {
         this.remainedComplexity = remainedComplexity;
     }
 
+    public Board getSource() {
+        return source;
+    }
 }

@@ -1,0 +1,47 @@
+.borderleft {
+    border-left: black 1px solid;
+}
+.borderright {
+    border-right: black 1px solid;
+}
+
+.day {
+    width: 100px;
+}
+
+.currentDay {
+    font-weight: bold;
+}
+
+.disabled {
+    background: grey;
+    cursor: none;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.cardsTrello {
+    border: 1px solid grey;
+    border-radius: 15px;
+    padding: 5px;
+    /*margin: 0px 5px 10px 0px;*/
+    display: flex;
+    background: white;
+}
+
+.modalTrello {
+    max-width: 900px !important;
+    overflow: auto !important;
+    max-height: 600px !important;
+}
+
+.fondCardTrello {
+    background: #ebecf0;
+    border-radius: 15px;
+}
+
+.fluo {
+    background-color: yellow ;
+}

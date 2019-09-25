@@ -4,7 +4,7 @@
 
 <title>Trello Backlogs Aggregator</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="../static/css/custom.css" th:href="@{css/custom.css}"
+<link href="../static/css/custom.css" th:href="@{/css/custom.css}"
     rel="stylesheet" media="screen" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -14,8 +14,15 @@
     th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"
     rel="stylesheet" media="screen" />
 
-<link href="../static/css/guru.css" th:href="@{css/guru.css}"
-    rel="stylesheet" media="screen" />
+<!--<link href="../static/css/guru.css" th:href="@{css/guru.css}"-->
+<!--    rel="stylesheet" media="screen" />-->
+    <script   th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+    <script th:src="@{'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js'}"></script>
+    <link rel="stylesheet" th:href="@{'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css'}" />
+
+    <script type="text/javascript" src="../static/js/CalendarClass.js" th:src="@{/js/CalendarClass.js}"></script>
+    <script type="text/javascript" src="../static/js/calendar.js" th:src="@{/js/calendar.js}"></script>
+    <script src="../static/js/spentTime.js" th:src="@{/js/spentTime.js}"></script>
 </head>
 <body>
 </body>

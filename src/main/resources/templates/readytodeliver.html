@@ -18,7 +18,7 @@
         <th:block th:if="cardsReadyToDeliver">
             <tr th:each="cardwithmembers : ${cardsReadyToDeliver}">
                 <td th:text="${cardwithmembers.backlogName}" />
-                <td><a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}" /></td>                
+                <td><a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}" target="_blank"/></td>
             </tr>
         </th:block>
     </table>

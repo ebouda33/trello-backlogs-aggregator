@@ -3,7 +3,17 @@ package io.tools.trellobacklogsaggregator.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.julienvey.trello.Trello;
+import com.julienvey.trello.domain.TList;
+import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
+import io.tools.trellobacklogsaggregator.execptions.ListException;
+import io.tools.trellobacklogsaggregator.model.BacklogsData;
+import io.tools.trellobacklogsaggregator.model.BoardDetail;
+import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import com.julienvey.trello.domain.Card;
@@ -13,6 +23,24 @@ import io.tools.trellobacklogsaggregator.model.CardWithMembers;
 
 @Service
 public class CardService {
+
+    private BacklogsRepository backlogsRepository;
+    private CustomConfiguration configurationProperties;
+    private Trello trello;
+
+
+    @Autowired
+    public CardService(BacklogsRepository backlogsRepository, CustomConfiguration configurationProperties, Trello trelloService) {
+        this.backlogsRepository = backlogsRepository;
+        this.configurationProperties = configurationProperties;
+        this.trello = trelloService;
+    }
+
+
+
+
+
+
     public String getCardName(Card card) {
         String cardName = card.getName().trim().replaceAll("[\\t\\n\\r]", " ").replaceAll(" +", " ");
         String[] nameElements = cardName.split(" ");
@@ -70,5 +98,17 @@ public class CardService {
             cardMembers.add(possibleMembers.get(idMember));
         });
         return new CardWithMembers(card, cardMembers, backlogName);
+    }
+
+    public List<Card> getCardsFromListsByLabel(String idBoard, String label){
+        final BacklogsData read = backlogsRepository.read();
+        if(read == null){
+            throw new RuntimeException("Batch is not started");
+        }
+        final BoardDetail board = read.getBoard(idBoard);
+//        configurationProperties.getColumnInSprintAllowed()
+
+        return board.getListByLabel(label).orElseThrow(ListException::new).getCardList();
+
     }
 }
