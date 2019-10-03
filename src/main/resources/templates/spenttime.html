@@ -14,20 +14,6 @@
 
 
     <div th:if="${currentMonth != null}">
-        <details>
-            <summary>
-                #Detail
-                <span th:if="${currentMonth != null}">Mois courant:<span
-                        th:text="${currentMonth.getLabel()}"></span></span>
-            </summary>
-            <span th:text="'board:'+${id}"></span>
-            <div th:each="mois : ${months}">
-                <!--            <span>Label:</span><span th:text="mois"></span>-->
-                <span>Label:</span><span th:text="${mois.getLabel().toUpperCase()}"></span>
-                <span>Année:</span><span th:text="${mois.getYear()}"></span>
-                <span>Duree:</span><span th:text="${mois.getLength()}"></span>
-            </div>
-        </details>
 
         <div style="display: flex;margin-bottom: 50px;">
             <div style="margin-right: 20px;">

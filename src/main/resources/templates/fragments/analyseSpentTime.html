@@ -7,7 +7,7 @@
 <body>
 
 <div th:fragment="analyse(stats,statsByDay,labels,members,listeMois,currentMonth,currentWeek,listDays,today, todayDay)">
-    <h4> Analyse Sur une Semaine</h4>
+    <h3> Analyse Sur une Semaine</h3>
     <select onchange="onChangeMonthAnalysis(this)" id="adminComboMonth">
         <th:block th:include="fragments/outils/input :: comboMois(${listeMois}, ${currentMonth})"></th:block>
     </select>
@@ -35,7 +35,7 @@
 
 
 
-    <h4> Analyse Sur la Journée</h4>
+    <h4> Analyse à la Journée</h4>
 
     <div class="container">
         <div class="row">
@@ -48,8 +48,8 @@
                 <tbody>
                 <tr th:each="member,iter : ${members}">
                     <td th:text="${member.getName()}"></td>
-                    <td th:each="dayTime,iter : ${statsByDay.get(member.getName())}" ><span th:text="${dayTime.getTotal()}"> </span> <input type="checkbox" class="checkValue" th:checked="${dayTime.getTotal()> 0}"></td>
-                    <td th:if="${statsByDay.get(member.getName()) == null && day != '00'}" th:each="day,iter : ${listDays}"><span>0.0 <input type="checkbox" class="checkValue" th:checked="false"></span></td>
+                    <td th:each="dayTime,iter : ${statsByDay.get(member.getName())}" ><span th:text="${dayTime.getTotal()}"> </span> <input type="checkbox" class="checkValue only" disabled th:checked="${dayTime.getTotal()> 0}"></td>
+                    <td th:if="${statsByDay.get(member.getName()) == null && day != '00'}" th:each="day,iter : ${listDays}"><span>0.0 <input type="checkbox" class="checkValue only" disabled th:checked="false"></span></td>
                 </tr>
                 </tbody>
             </table>

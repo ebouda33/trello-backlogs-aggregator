@@ -2,30 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-     <th:block th:include="fragments/header :: header"></th:block>
+    <th:block th:include="fragments/header :: header"></th:block>
 </head>
 <div class="container">
-     <th:block th:include="fragments/menu :: menu"></th:block>
+    <th:block th:include="fragments/menu :: menu"></th:block>
 
     <th:block th:include="fragments/errors :: errors"></th:block>
-    
-    <h2>Backlog List</h2>
-    <table class="table table-striped">
-        <tr>
-            <th>Name</th>
-            <th>Business complexity</th>
-            <th>Consumed complexity</th>
-            <th>Remained complexity</th>
-            <th>Total complexity</th>
-        </tr>
-        <tr th:each="board : ${boards}">
-            <td th:text="${board.name}"/>           
-            <td th:text="${#numbers.formatDecimal(board.businessComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(board.consumedComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(board.remainedComplexity, 1, 2)}"/>
-            <td th:text="${#numbers.formatDecimal(board.totalComplexity, 1, 2)}"/>
-        </tr>
-    </table>
 
+    <details open>
+        <summary>
+            <h2>Backlog List</h2>
+
+        </summary>
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Business complexity</th>
+                <th>Consumed complexity</th>
+                <th>Remained complexity</th>
+                <th>Total complexity</th>
+            </tr>
+            <tr th:each="board : ${boards}">
+                <td th:text="${board.name}"/>
+                <td th:text="${#numbers.formatDecimal(board.businessComplexity, 1, 2)}"/>
+                <td th:text="${#numbers.formatDecimal(board.consumedComplexity, 1, 2)}"/>
+                <td th:text="${#numbers.formatDecimal(board.remainedComplexity, 1, 2)}"/>
+                <td th:text="${#numbers.formatDecimal(board.totalComplexity, 1, 2)}"/>
+            </tr>
+        </table>
+
+    </details>
 </div>
 </html>

@@ -2,73 +2,88 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 </head>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/menu :: menu"></th:block> /*/-->
 
     <!--/*/ <th:block th:include="fragments/errors :: errors"></th:block> /*/-->
 
-    <h2>Sprint</h2>
-    <table class="table table-striped">
-        <tr>
-            <th>Name</th>
-            <th>Nb items</th>
-            <th>Business complexity</th>
-            <th>Consumed complexity</th>
-            <th>Remained complexity</th>
-            <th>Total complexity</th>
-        </tr>
-        <th:block th:each="column : ${sprint.columns}">
-        <tr>
-            <td th:text="${column.name}" />
-            <td th:text="${column.cardsWithMembers.size()}" />
-            <td th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}" />
-            <td th:text="${#numbers.formatDecimal(column.consumedComplexity, 1, 2)}" />
-            <td th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}" />
-            <td th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}" />
-        </tr>
-        <tr th:each="columnLabel : ${#lists.sort(column.columnLabels, columnLabelComparator)}">
-            <td><small class="text-info" th:text="${columnLabel.label.name}" ></small></td>
-            <td><small class="text-info" th:text="${columnLabel.cardsWithMembers.size()}" ></small></td>
-            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.businessComplexity, 1, 2)}" ></small></td>
-            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.consumedComplexity, 1, 2)}" ></small></td>
-            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.remainedComplexity, 1, 2)}" ></small></td>
-            <td><small class="text-info"  th:text="${#numbers.formatDecimal(columnLabel.totalComplexity, 1, 2)}" ></small></td>
-        </tr>
-        </th:block>
-        <tr>
-            <td>TOTAL</td>
-            <td th:text="${totalNbItemsInSprint}"></td>
-            <td th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}" />
-            <td th:text="${#numbers.formatDecimal(sprint.consumedComplexity, 1, 2)}" />
-            <td th:text="${#numbers.formatDecimal(sprint.remainedComplexity, 1, 2)}" />
-            <td th:text="${#numbers.formatDecimal(sprint.totalComplexity, 1, 2)}" />
-        </tr>
+    <details open>
+        <summary>
+            <h2>Sprint</h2>
 
-    </table>
-
-    <h2>User Stories</h2>
-    <table class="table table-striped">
-        <tr>
-            <th>Status</th>
-            <th>Backlog</th>
-            <th>Title</th>
-            <th>Actor</th>
-        </tr>
-        <th:block th:if="sprint">
+        </summary>
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Nb items</th>
+                <th>Business complexity</th>
+                <th>Consumed complexity</th>
+                <th>Remained complexity</th>
+                <th>Total complexity</th>
+            </tr>
             <th:block th:each="column : ${sprint.columns}">
-                <tr th:each="cardwithmembers : ${column.cardsWithMembers}">
-                    <td th:text="${column.name}" />
-                    <td th:text="${cardwithmembers.backlogName}" />
-                    <td><a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}" /></td>
-                    <td><th:block th:each="member : ${cardwithmembers.members}">
-                            <p th:text="${member.fullName}" />
-                        </th:block></td>
+                <tr>
+                    <td th:text="${column.name}"/>
+                    <td th:text="${column.cardsWithMembers.size()}"/>
+                    <td th:text="${#numbers.formatDecimal(column.businessComplexity, 1, 2)}"/>
+                    <td th:text="${#numbers.formatDecimal(column.consumedComplexity, 1, 2)}"/>
+                    <td th:text="${#numbers.formatDecimal(column.remainedComplexity, 1, 2)}"/>
+                    <td th:text="${#numbers.formatDecimal(column.totalComplexity, 1, 2)}"/>
+                </tr>
+                <tr th:each="columnLabel : ${#lists.sort(column.columnLabels, columnLabelComparator)}">
+                    <td><small class="text-info" th:text="${columnLabel.label.name}"></small></td>
+                    <td><small class="text-info" th:text="${columnLabel.cardsWithMembers.size()}"></small></td>
+                    <td><small class="text-info"
+                               th:text="${#numbers.formatDecimal(columnLabel.businessComplexity, 1, 2)}"></small></td>
+                    <td><small class="text-info"
+                               th:text="${#numbers.formatDecimal(columnLabel.consumedComplexity, 1, 2)}"></small></td>
+                    <td><small class="text-info"
+                               th:text="${#numbers.formatDecimal(columnLabel.remainedComplexity, 1, 2)}"></small></td>
+                    <td><small class="text-info"
+                               th:text="${#numbers.formatDecimal(columnLabel.totalComplexity, 1, 2)}"></small></td>
                 </tr>
             </th:block>
-        </th:block>
-    </table>
+            <tr>
+                <td>TOTAL</td>
+                <td th:text="${totalNbItemsInSprint}"></td>
+                <td th:text="${#numbers.formatDecimal(sprint.businessComplexity, 1, 2)}"/>
+                <td th:text="${#numbers.formatDecimal(sprint.consumedComplexity, 1, 2)}"/>
+                <td th:text="${#numbers.formatDecimal(sprint.remainedComplexity, 1, 2)}"/>
+                <td th:text="${#numbers.formatDecimal(sprint.totalComplexity, 1, 2)}"/>
+            </tr>
+
+        </table>
+    </details>
+
+    <details>
+        <summary>
+            <h2>User Stories</h2>
+        </summary>
+        <table class="table table-striped">
+            <tr>
+                <th>Status</th>
+                <th>Backlog</th>
+                <th>Title</th>
+                <th>Actor</th>
+            </tr>
+            <th:block th:if="sprint">
+                <th:block th:each="column : ${sprint.columns}">
+                    <tr th:each="cardwithmembers : ${column.cardsWithMembers}">
+                        <td th:text="${column.name}"/>
+                        <td th:text="${cardwithmembers.backlogName}"/>
+                        <td><a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}"/></td>
+                        <td>
+                            <th:block th:each="member : ${cardwithmembers.members}">
+                                <p th:text="${member.fullName}"/>
+                            </th:block>
+                        </td>
+                    </tr>
+                </th:block>
+            </th:block>
+        </table>
+    </details>
 
 </div>
 </html>
