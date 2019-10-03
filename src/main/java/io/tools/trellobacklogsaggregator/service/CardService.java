@@ -3,6 +3,8 @@ package io.tools.trellobacklogsaggregator.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.julienvey.trello.Trello;
@@ -11,7 +13,9 @@ import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
 import io.tools.trellobacklogsaggregator.execptions.ListException;
 import io.tools.trellobacklogsaggregator.model.BacklogsData;
 import io.tools.trellobacklogsaggregator.model.BoardDetail;
+import io.tools.trellobacklogsaggregator.model.CardModel;
 import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
+import io.tools.trellobacklogsaggregator.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -26,19 +30,17 @@ public class CardService {
 
     private BacklogsRepository backlogsRepository;
     private CustomConfiguration configurationProperties;
+    private CardRepository cardRepository;
     private Trello trello;
 
 
     @Autowired
-    public CardService(BacklogsRepository backlogsRepository, CustomConfiguration configurationProperties, Trello trelloService) {
+    public CardService(BacklogsRepository backlogsRepository,CardRepository cardRepository, CustomConfiguration configurationProperties, Trello trelloService) {
         this.backlogsRepository = backlogsRepository;
         this.configurationProperties = configurationProperties;
         this.trello = trelloService;
+        this.cardRepository = cardRepository;
     }
-
-
-
-
 
 
     public String getCardName(Card card) {
@@ -92,6 +94,33 @@ public class CardService {
         return value;
     }
 
+    public void setConsumedComplexity(Card card, Double time) {
+        setComplexity(card, time, "[", "]");
+    }
+
+    public void setTotalComplexity(Card card, Double time) {
+        setComplexity(card, time, "{", "}");
+    }
+    public void setBusinessComplexity(Card card, Double time) {
+        setComplexity(card, time, "(", ")");
+    }
+
+    public void setComplexity(Card card, Double time, String delimiterStart, String delimiterEnd) {
+        Pattern p = Pattern.compile("(\\[(\\d+(.\\d+)?)\\])");
+        String name = card.getName();
+        Matcher m = p.matcher(name);
+        boolean find = false;
+        while (m.find()) {
+            name = m.replaceAll("[" + time + "]");
+            find = true;
+        }
+        if (!find) {
+            name += " [" + time + "]";
+        }
+        card.setName(name);
+        trello.updateCard(card);
+    }
+
     public CardWithMembers createCardWithMembers(Card card, Map<String, Member> possibleMembers, String backlogName) {
         List<Member> cardMembers = new ArrayList<>();
         card.getIdMembers().forEach(idMember -> {
@@ -100,9 +129,9 @@ public class CardService {
         return new CardWithMembers(card, cardMembers, backlogName);
     }
 
-    public List<Card> getCardsFromListsByLabel(String idBoard, String label){
+    public List<Card> getCardsFromListsByLabel(String idBoard, String label) {
         final BacklogsData read = backlogsRepository.read();
-        if(read == null){
+        if (read == null) {
             throw new RuntimeException("Batch is not started");
         }
         final BoardDetail board = read.getBoard(idBoard);
@@ -110,5 +139,9 @@ public class CardService {
 
         return board.getListByLabel(label).orElseThrow(ListException::new).getCardList();
 
+    }
+
+    public CardModel findAndSave(CardModel card) {
+        return cardRepository.save(card);
     }
 }

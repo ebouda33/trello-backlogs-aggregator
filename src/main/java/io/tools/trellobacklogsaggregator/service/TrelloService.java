@@ -107,7 +107,7 @@ public class TrelloService {
         return backlogsData;
     }
 
-    private Map<String, Member> getMembers(String organizationId) {
+    public Map<String, Member> getMembers(String organizationId) {
         List<Member> membersList = trelloApi.getOrganizationMembers(organizationId);
         Map<String, Member> members = new HashMap<>();
         membersList.forEach(member -> {
@@ -126,4 +126,9 @@ public class TrelloService {
                 });
         return storiesBoards;
     }
+
+    public List<Member> getMembersForBoard(String boardID){
+        return trelloApi.getBoardMembers(boardID);
+    }
+
 }

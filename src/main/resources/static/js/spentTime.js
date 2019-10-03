@@ -34,20 +34,35 @@ function endSetTime(e, id, label, column) {
     const value = $('#' + id + ' > input')[0].value;
     $('#' + id + ' > input').hide();
     currentCalendar.writeTimeToCalendar(label, column, value);
-    let time = currentCalendar.getTime(label, column);
-    $('#' + id + ' > span')[0].innerHTML = time;
-    $('#' + id + ' > input')[0].value = time;
-    $('#' + id + ' > span').show();
-    if (value > 0) {
-        $('#addCards_' + id + ' > a').show();
-    } else {
-        $('#addCards_' + id + ' > a').hide();
+    const time = currentCalendar.getTime(label, column);
+    displayTime(time, id);
+}
+
+function displayTime(time, id) {
+    if ($('#' + id + ' > input')[0] !== undefined) {
+        let value = $('#' + id + ' > input')[0].value;
+        const $1 = $('#' + id + ' > span');
+        $1[0].innerHTML = time;
+        $('#' + id + ' > input')[0].value = time;
+        if (value === "") {
+            value = time;
+        }
+        $1.show();
+        if (value > 0) {
+            $('#addCards_' + id + ' > a').show();
+        } else {
+            $('#addCards_' + id + ' > a').hide();
+        }
     }
+}
+
+function refreshInfo() {
+    // const time = currentCalendar.getTime(label, column);
+    // displayTime(time);
 }
 
 function init(idBoard) {
     getDefaultList();
-    // getlistsTrello(idBoard);
 }
 
 function getDefaultList() {
@@ -114,18 +129,18 @@ function getCards(select, id, label, day) {
 
 function generateCardTrello(data, label, day) {
 
-    const template = `<div class='cardsTrello col-md-4 [class]' id='cardID' ><div> <input type="checkbox" [checked] id='checkbox_cardID' onclick="checkCardToCalendar(this,'${label}',${day})"></div><span>[name]</span><span><a href='[url]' target='_blank'>Voir</a> </span></div>`;
+    const template = `<div class='cardsTrello col-md-4 [class]' id='cardID' onclick="checkCardToCalendarClick($('#checkbox_cardID')[0])"><div > <input type="checkbox" [checked] id='checkbox_cardID' onclick="checkCardToCalendar(this,'${label}',${day})"></div><span>[name]</span><span><a href='[url]' target='_blank'>Voir</a> </span></div>`;
     let render = "";
     let count = 0;
     $.each(data, function (index, value) {
-        let cardIn = currentCalendar.isCardIn(value.id,label,day);
-        const checked = cardIn?'checked':'';
+        let cardIn = currentCalendar.isCardIn(value.id, label, day);
+        const checked = cardIn ? 'checked' : '';
         count++;
-        const div = template.replace("[class]", cardIn?'fluo':'')
+        const div = template.replace("[class]", cardIn ? 'fluo' : '')
             .replace("[checked]", checked)
             .replace("[name]", value.name)
             .replace("[url]", value.shortUrl)
-            .replace(new RegExp("cardID","gi"), value.id);
+            .replace(new RegExp("cardID", "gi"), value.id);
 
         if (index % 3 === 0) {
             render += "<div class='row'>";
@@ -140,4 +155,16 @@ function generateCardTrello(data, label, day) {
 
     return "<div class='col-md-12'>" + render + "</div>";
 }
+
+function onChangeMember(select) {
+
+    $.postJSON("/spentTime/currentMember",
+        select.value, function (data) {
+            window.document.location.reload();
+        }, function (error) {
+            console.error(error);
+            window.document.location.reload();
+        }, "text/plain");
+}
+
 

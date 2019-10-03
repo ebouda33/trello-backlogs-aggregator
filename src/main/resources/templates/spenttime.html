@@ -32,98 +32,82 @@
         <div style="display: flex;margin-bottom: 50px;">
             <div style="margin-right: 20px;">
                 <select onchange="onChangeMonth(this)">
-                    <option disabled="disabled" selected="selected">Mois</option>
-                    <option th:each="mois : ${months}" th:value="${mois.getIndex()}"
-                            th:text="${mois.getLabel().toUpperCase()+ ' '+mois.getYear()}"
-                            th:selected="${mois.getIndex() == currentMonth.getIndex()}"></option>
+                    <th:block th:include="fragments/outils/input :: comboMois(${months}, ${currentMonth})"></th:block>
                 </select>
             </div>
             <div style="margin-right: 20px;">
 
                 Semaine :
                 <select th:onchange="'onChangeWeek(this,'+${currentMonth.getIndex()}+')'">
-                    <option th:each="week : ${currentMonth.getWeekRestList()}" th:text="${week}"
-                            th:value="${week.getIndex()}" th:selected="${week.getIndex() == currentWeek}"></option>
+                    <th:block th:include="fragments/outils/input :: comboWeek(${currentMonth},${currentWeek})"></th:block>
                 </select>
             </div>
             <div>
-                Qui êtes vous:
-                <select>
-                    <option selected>Personne</option>
-                    <option>Pierre</option>
-                    <option>Paul</option>
-                    <option>Jack</option>
+                <select class="member" onchange="onChangeMember(this)">
+                    <option value="0">Qui êtes vous</option>
+                    <option th:each="member : ${members}" th:text="${member.getName()}"
+                            th:value="${member.getIdentifiant_trello()}" th:selected="${member.getIdentifiant_trello() == currentMember}"></option>
+
                 </select>
             </div>
         </div>
 
-        <table class="table table-striped">
-            <tr>
-                <th>Name</th>
-                <!--                <th th:each="jour :  ${#numbers.sequence(1,currentMonth.getLength())}" th:text="${jour}"></th>-->
-                <td class="day" th:class="${listDays[0] == today}?currentDay">Lundi <span th:if="${listDays[0] != '00'}"
-                                                                                          th:text="${listDays[0]}"></span>
-                </td>
-                <td class="day" th:class="${listDays[1] == today}?currentDay">Mardi <span th:if="${listDays[1] != '00'}"
-                                                                                          th:text="${listDays[1]}"></span>
-                </td>
-                <td class="day" th:class="${listDays[2] == today}?currentDay">Mercredi <span
-                        th:if="${listDays[2] != '00'}"
-                        th:text="${listDays[2]}"></span>
-                </td>
-                <td class="day" th:class="${listDays[3] == today}?currentDay">Jeudi <span th:if="${listDays[3] != '00'}"
-                                                                                          th:text="${listDays[3]}"></span>
-                </td>
-                <td class="day" th:class="${listDays[4] == today}?currentDay">Vendredi <span
-                        th:if="${listDays[4] != '00'}"
-                        th:text="${listDays[4]}"></span>
-                </td>
+        <div th:if="${currentMember} != null">
+            <table class="table table-striped">
+                <thead>
+                    <th>Name</th>
+                    <th:block th:include="fragments/outils/input :: headerTable(${listDays}, ${todayDay},${ today},${ currentMonth},true)"></th:block>
 
-            </tr>
-            <tr th:each="label,row : ${labels}">
-                <td th:text="${label.getValue()}" th:bgcolor="${label.getKey()}" style="color: white;"
-                    class="borderright"/>
-                <!--                th:onclick="|showLine(0,${row.index+'_'+0},0)|"-->
-                <td th:each="day,iter : ${listDays}"
-                    class="borderright day" th:classappend="${day == '00'}? disabled: clickable"
-                    th:disabled="${day == '00'}"
-                    th:onclick="showLine([[${day}]],[[${label.getValue()}]],[[${row.index+'_'+iter.index}]],[[${iter.index}]])"
-                >
-                    <div th:include="fragments/spenttimeInput.html:: inputField(${iter.index},${row.index}, ${label.getValue()})">
+
+
+                </thead>
+                <tr th:each="label,row : ${labels}">
+                    <td th:text="${label.getValue()}" th:class="${'borderright trello-'+label.getKey()}" />
+                    <!--                th:onclick="|showLine(0,${row.index+'_'+0},0)|"-->
+                    <td th:each="day,iter : ${listDays}"
+                        class="borderright day" th:classappend="${day == '00'}? disabled: clickable"
+                        th:disabled="${day == '00'}"
+                        th:onclick="showLine([[${day}]],[[${label.getValue()}]],[[${row.index+'_'+iter.index}]],[[${iter.index}]])"
+                    >
+                        <div style="display: flex;" th:include="fragments/spenttimeInput.html:: inputField(${iter.index},${row.index}, ${label.getValue()})">
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="borderright">TOTAL</td>
+                    <td th:each="day,iter : ${listDays}" class="borderright day"
+                        th:classappend="${day == '00'}? disabled: clickable" th:disabled="${day == '00'}">
+                        <span th:id="${'totalDay_'+iter.index}" listener="calendar" th:day="${iter.index}"></span>
+                    </td>
+                </tr>
+            </table>
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-md-10" id="msgErrorValidation"><span></span></div>
+                    <div class="col-md-2 pull-right">
+                        <button class="btn-default" onclick="saveCalendar(this)">Enregistrer Saisie</button>
                     </div>
-                </td>
-
-            </tr>
-            <tr>
-                <td class="borderright">TOTAL</td>
-                <td th:each="day,iter : ${listDays}" class="borderright day"
-                    th:classappend="${day == '00'}? disabled: clickable" th:disabled="${day == '00'}">
-                    <span th:id="${'totalDay_'+iter.index}" listener="calendar" th:day="${iter.index}"></span>
-                </td>
-            </tr>
-        </table>
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-md-10" id="msgErrorValidation"><span></span></div>
-                <div class="col-md-2 pull-right">
-                    <button class="btn-default" onclick="saveCalendar()">Enregistrer Saisie</button>
                 </div>
             </div>
+            <div>
+                <details>
+                    <summary>
+                        <span> Légende</span>
+
+                    </summary>
+                    <p>La saisie se fait en dixieme de jour, pour un jour = 1, pour une demi/journée = 0.5 etc...</p>
+                    <p>Vous ne pouvez pas saisir plus de 1 jour au total des Types de cartes Trello</p>
+                </details>
+            </div>
+        </div>
+
+        <div th:if="${currentMember} == null">
+            Qui êtes Vous?
         </div>
     </div>
-</div>
-
-<div>
-    <details>
-        <summary>
-            <span> Légende</span>
-
-        </summary>
-        <p>La saisie se fait en dixieme de jour, pour un jour = 1, pour une demi/journée = 0.5 etc...</p>
-        <p>Vous ne pouvez pas saisir plus de 1 jour au total des Types de cartes Trello</p>
-    </details>
 </div>
 
 
@@ -133,12 +117,14 @@
     var month = /*[[${currentMonth.getIndex()}]]*/ '1';
     var week = /*[[${currentWeek}]]*/ '1';
     var first = /*[[${firstDayWeek}]]*/ undefined;
-    var last = /*[[${LastDayWeek}]]*/ undefined;
+    var last = /*[[${lastDayWeek}]]*/ undefined;
     var labels = /*[[${labels}]]*/ undefined;
     var boardId = /*[[${id}]]*/ undefined;
+    var content = /*[[${content}]]*/ undefined;
+    var indexFirstDayWeek = /*[[${indexFirstDayWeek}]]*/ undefined;
     /*]]>*/
     $(document).ready(function () {
-        generateCalendar(labels,year, month, week, first, last);
+        generateCalendar(labels, year, month, week, first, last, indexFirstDayWeek);
         let i = 0;
         $.each(labels, function (color, value) {
             for (let j = 0; j < 5; j++) {

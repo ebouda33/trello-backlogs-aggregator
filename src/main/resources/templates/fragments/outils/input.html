@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Combo Mois</title>
+</head>
+<body>
+
+<div >
+    <select  th:fragment="comboMois(months, currentMonth)">
+        <option disabled="disabled" selected="selected">Mois</option>
+        <option th:each="mois : ${months}" th:value="${mois.getIndex()}"
+                th:text="${mois.getLabel().toUpperCase()+ ' '+mois.getYear()}"
+                th:selected="${currentMonth != null && mois.getIndex() == currentMonth.getIndex()}"
+        ></option>
+    </select>
+</div>
+
+<select th:fragment="comboWeek(currentMonth,currentWeek)">
+    <option th:each="week : ${currentMonth.getWeekRestList()}" th:text="${week}"
+            th:value="${week.getIndex()}" th:selected="${currentWeek != null && week.getIndex() == currentWeek}"></option>
+</select>
+
+<table th:fragment="headerTable(listDays, todayDay, today, currentMonth, displayFull)">
+
+
+    <div th:if="${displayFull}">
+        <th class="day" th:class="${listDays[0] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" ><span th:if="${listDays[0] != '00'}"
+                th:text="${'Lundi '+listDays[0]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[1] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" ><span th:if="${listDays[1] != '00'}"
+                th:text="${'Mardi '+listDays[1]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[2] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" ><span th:if="${listDays[2] != '00'}"
+                th:text="${'Mercredi '+listDays[2]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[3] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" ><span th:if="${listDays[3] != '00'}"
+                th:text="${'Jeudi '+listDays[3]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[4] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" ><span th:if="${listDays[4] != '00'}"
+                th:text="${'Vendredi '+listDays[4]}"></span>
+        </th>
+    </div>
+    <div th:if="${!displayFull}">
+        <th class="day" th:class="${listDays[0] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" th:if="${listDays[0] != '00'}"><span
+                th:text="${'Lundi '+listDays[0]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[1] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" th:if="${listDays[1] != '00'}"><span
+                th:text="${'Mardi '+listDays[1]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[2] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" th:if="${listDays[2] != '00'}"><span
+                th:text="${'Mercredi '+listDays[2]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[3] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" th:if="${listDays[3] != '00'}"><span
+                th:text="${'Jeudi '+listDays[3]}"></span>
+        </th>
+        <th class="day" th:class="${listDays[4] == todayDay && currentMonth.getIndex()== today.getMonthValue()}?currentDay" th:if="${listDays[4] != '00'}"><span
+                th:text="${'Vendredi '+listDays[4]}"></span>
+        </th>
+
+    </div>
+
+</table>
+
+</body>
+</html>

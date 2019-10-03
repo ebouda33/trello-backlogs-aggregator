@@ -1,10 +1,11 @@
 package io.tools.trellobacklogsaggregator.repository;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import io.tools.trellobacklogsaggregator.model.BacklogsData;
 
-@Service
+@Repository
 public class BacklogsRepository {
     private BacklogsData backlogsData;
 

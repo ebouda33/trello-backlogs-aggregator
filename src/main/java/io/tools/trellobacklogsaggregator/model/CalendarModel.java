@@ -1,10 +1,10 @@
 package io.tools.trellobacklogsaggregator.model;
 
-import org.joda.time.Instant;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity(name = "CalendarModel")
@@ -12,15 +12,16 @@ import java.util.List;
 uniqueConstraints = {
         @UniqueConstraint(columnNames ={"id","date","labelTrello"})
 })
+//@JsonDeserialize(using = CustomCalendarModelDeserializer.class)
 public class CalendarModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private Instant date;
+    private LocalDate date;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="calendar_cards",
         joinColumns = @JoinColumn(name = "calendar_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "card_id", referencedColumnName = "id")
@@ -32,7 +33,20 @@ public class CalendarModel implements Serializable {
 
     private String labelTrello;
 
+    @NotNull
+    private int dayInWeek;
+    @NotNull
+    private int month;
+
+    @NotNull
+    private int year;
+
+    @NotNull
+    private String boardID;
+
+    @NotNull
     @ManyToOne()
+    @JoinColumn(name = "user_id")
     private UserModel user;
 
     public Long getId() {
@@ -43,11 +57,11 @@ public class CalendarModel implements Serializable {
         this.id = id;
     }
 
-    public Instant getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Instant date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -81,6 +95,38 @@ public class CalendarModel implements Serializable {
 
     public void setUser(UserModel user) {
         this.user = user;
+    }
+
+    public int getDayInWeek() {
+        return dayInWeek;
+    }
+
+    public void setDayInWeek(int dayInWeek) {
+        this.dayInWeek = dayInWeek;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getBoardID() {
+        return boardID;
+    }
+
+    public void setBoardID(String boardID) {
+        this.boardID = boardID;
     }
 
     @Override

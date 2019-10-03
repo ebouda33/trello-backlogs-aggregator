@@ -29,22 +29,29 @@ class ExportCalendar {
     labelTrello = null;
     user = null;
     cards = [];
+    id = null;
+    dayInWeek;
+    month;
+    year;
 
 
-    constructor(date, time, labelTrello, user, cards = []) {
+    constructor(id, date, time, labelTrello, user, cards = [], day) {
+        this.id = id;
         this.date = date;
         this.time = time;
         this.labelTrello = labelTrello;
-        this.user = user;
-        this.cards = cards;
+        this.user = {id: user};
+        this.cards = cards.map(cal =>{ return {id:cal}});
+        this.dayInWeek = day;
+        this.month = date.getMonth() + 1;
+        this.year = date.getFullYear();
     }
 }
 
 class CalendarClass {
-
-
+    #_id = {};
     #_calendar = {};
-    #user;
+    #_user;
     #_year;
     #_monthNumber;
     #_weekNumber;
@@ -53,25 +60,50 @@ class CalendarClass {
     #_limitDay = 5;
     #_firstDay;
     #_lastDay;
+    #_indexFirstDay;
 
 
-    constructor(label,year, month, week, firstDay, lastDay) {
+    constructor( label, year, month, week, firstDay, lastDay, indexFirstDay) {
         this.init(label);
         this.weekNumber = week;
         this.monthNumber = month;
-        this.year = year;
         this.firstDay = firstDay;
         this.lastDay = lastDay;
-
+        this.year = year;
+        this.indexFirstDay = indexFirstDay;
     }
 
 
+    get indexFirstDay() {
+        return this.#_indexFirstDay;
+    }
+
+    set indexFirstDay(value) {
+        this.#_indexFirstDay = value;
+    }
+
+    get id() {
+        return this.#_id;
+    }
+
+    get year() {
+        return this.#_year;
+    }
+
+    get month() {
+        return this.#_monthNumber;
+    }
+
+    get limitDay() {
+        return this.#_limitDay;
+    }
+
     get firstDay() {
-        return this._firstDay;
+        return this.#_firstDay;
     }
 
     get lastDay() {
-        return this._lastDay;
+        return this.#_lastDay;
     }
 
     get listeners() {
@@ -86,6 +118,10 @@ class CalendarClass {
         return this.#_calendar;
     }
 
+    set id(value) {
+        this.#_id = value;
+    }
+
     set weekNumber(value) {
         this.#_weekNumber = value;
     }
@@ -96,21 +132,27 @@ class CalendarClass {
 
 
     set year(value) {
-        this._year = value;
+        this.#_year = value;
     }
 
     set firstDay(value) {
-        this._firstDay = value;
+        this.#_firstDay = value;
     }
 
     set lastDay(value) {
-        this._lastDay = value;
+        this.#_lastDay = value;
+    }
+
+
+    set user(value) {
+        this.#_user = value;
     }
 
     init(label) {
         Object.keys(label).forEach(key => {
             this.#_calendar[label[key]] = [0, 0, 0, 0, 0];
             this.#_cards[label[key]] = [[], [], [], [], []];
+            this.#_id[label[key]] = [undefined, undefined, undefined, undefined, undefined];
         });
     }
 
@@ -214,20 +256,36 @@ class CalendarClass {
     toJson() {
         const calendars = [];
         Object.keys(this.#_calendar).forEach(key => {
-            for(let day =0 ; day < this.#_limitDay; day++){
+            for (let day = 0; day < this.#_limitDay; day++) {
                 const time = this.#_calendar[key][day];
                 const cards = this.#_cards[key][day];
-                calendars.push(new ExportCalendar(null, time, key, this.#user, cards));
+                const id = this.#_id[key][day];
+                if(day >= this.indexFirstDay) {
+                    const currentDate = TransformerCalendar.transformDayToDate(this, day, this.indexFirstDay);
+                    // TODO controler la coherence de la date de début avec celle de la semaine exemple 01/10/2019 => mardi par lundi
+                    calendars.push(new ExportCalendar(id, currentDate, time, key, this.#_user, cards, day));
+
+                }
             }
         });
         return JSON.stringify(calendars);
     }
+
+    dataToCalendar(data) {
+        const that = this;
+        $.each(data , function (index, calendar) {
+            that.#_id[calendar.labelTrello][calendar.dayInWeek] = calendar.id;
+            that.#_calendar[calendar.labelTrello][calendar.dayInWeek] = calendar.time;
+            that.#_cards[calendar.labelTrello][calendar.dayInWeek] = calendar.cards.map(cal => cal.id);
+        });
+        that.preventListeners();
+    }
 }
 
 
-class TransformerCalendar{
+class TransformerCalendar {
 
-    static transformDayToDate(month,week,day){
-
+    static transformDayToDate(calendar, dayIndex, firstDayIndex) {
+        return new Date(Date.UTC(calendar.year, calendar.month - 1, dayIndex === firstDayIndex ? calendar.firstDay : dayIndex === calendar.limitDay ? calendar.lastDay : calendar.firstDay + (dayIndex-firstDayIndex)));
     }
 }

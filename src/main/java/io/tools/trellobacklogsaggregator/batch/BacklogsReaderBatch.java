@@ -1,5 +1,7 @@
 package io.tools.trellobacklogsaggregator.batch;
 
+import com.julienvey.trello.domain.Member;
+import io.tools.trellobacklogsaggregator.service.CalendarService;
 import org.joda.time.Duration;
 import org.joda.time.Instant;
 import org.slf4j.Logger;
@@ -14,6 +16,9 @@ import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
 import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
 import io.tools.trellobacklogsaggregator.service.TrelloService;
 
+import java.util.List;
+import java.util.Map;
+
 
 @Configuration
 @EnableScheduling
@@ -26,6 +31,9 @@ public class BacklogsReaderBatch {
 
     @Autowired
     private TrelloService trelloService;
+
+    @Autowired
+    private CalendarService calendarService;
 
     @Autowired
     private CustomConfiguration customConfiguration;
@@ -46,14 +54,19 @@ public class BacklogsReaderBatch {
     }
 
     //    @Scheduled(cron = "${batch.frequency}")
-    @Scheduled(fixedRateString = "${batch.delay}", initialDelay = 5000)
+    @Scheduled(fixedRateString = "${batch.delay}", initialDelayString = "${batch.initial.delay}")
     @Async
     public void execute() {
         isRunning = true;
         batchDate = Instant.now();
         logger.debug("BacklogsReaderBatch starting");
-        backlogsRepository.save(trelloService.readBacklogs(customConfiguration.getOrganisationId()));
-        isRunning = false;
+        try {
+            backlogsRepository.save(trelloService.readBacklogs(customConfiguration.getOrganisationId()));
+        }catch (Exception exc){
+            logger.error(exc.getMessage());
+        }finally {
+            isRunning = false;
+        }
         Instant batchDateEnd = Instant.now();
         duration = new Duration(batchDate, batchDateEnd);
         batchDate = batchDateEnd;

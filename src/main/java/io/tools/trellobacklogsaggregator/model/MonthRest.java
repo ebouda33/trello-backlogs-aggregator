@@ -1,5 +1,11 @@
 package io.tools.trellobacklogsaggregator.model;
 
+import io.tools.trellobacklogsaggregator.service.UtilService;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +15,7 @@ public class MonthRest {
     private int length;
     private int firstDay;
     private int year;
+    private String value;
     private int index;
     private List<WeekRest> weekRestList;
 
@@ -18,6 +25,7 @@ public class MonthRest {
         this.firstDay = firstDay;
         this.year = year;
         this.index = index;
+        this.value = String.format("%02d",index);
     }
 
     public int getIndex() {
@@ -60,10 +68,24 @@ public class MonthRest {
         if (weekRestList == null) {
             weekRestList = new ArrayList<>();
         }
-        weekRestList.add(new WeekRest(firstDay, lastDay, index, indexFirstDay, indexLastDay));
+        weekRestList.add(new WeekRest(firstDay, lastDay, index, indexFirstDay, indexLastDay,this.index, year));
     }
 
     public List<WeekRest> getWeekRestList() {
         return weekRestList;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public LocalDate getLastDay(){
+        final LocalDate parse = LocalDate.parse(year + "-" + String.format("%02d", index) + "-01");
+        int length = parse.lengthOfMonth();
+        return LocalDate.parse(year + "-" + String.format("%02d", index) + "-"+length);
+    }
+
+    public WeekRest getWeekFor(LocalDate day){
+        return this.weekRestList.stream().filter(weekRest -> weekRest.isIn(day)).findFirst().orElse(this.weekRestList.get(0));
     }
 }
