@@ -160,6 +160,7 @@ class CalendarClass {
         if (this.#_calendar[label] !== undefined) {
             value = isNaN(value) || value.trim().length === 0 ? 0 : value * 1;
             value = value > 1 ? 1 : value < 0 ? 0 : value * 1;
+            if(value ==0 ) this.#_cards[label][day] = [];
             value = this.controleCoherenceDay(label, day, value);
             this.#_calendar[label][day] = value;
             this.preventListeners();
@@ -173,9 +174,8 @@ class CalendarClass {
     }
 
     toggleCard(label, day, card) {
-        let find = this.#_cards[label][day].find(card => card === card);
         if (this.isCardIn(card, label, day)) {
-            this.#_cards[label][day] = this.#_cards[label][day].filter(card => card !== card);
+            this.#_cards[label][day] = this.#_cards[label][day].filter(id => id !== card);
         } else {
             this.#_cards[label][day].push(card);
         }

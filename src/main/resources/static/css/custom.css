@@ -103,48 +103,59 @@ input[type="checkbox"].checkValue:checked:after {
 
 
 .trello-green{
-    background-color: #519839;
+    background-color: #61bd4f;
     color: white;
+    font-weight: bold;
 }
 .trello-red {
     background-color: #eb5a46;
     color: white;
+    font-weight: bold;
 }
 .trello-sky {
     background-color: #00c2e0;
     color: white;
+    font-weight: bold;
 }
 .trello-yellow {
     background-color: #f2d600;
     color: black;
+    font-weight: bold;
 }
 .trello-orange {
     background-color: #ff9f1a;
     color: white;
+    font-weight: bold;
 }
 .trello-purple {
     background-color: #c377e0;
     color: white;
+    font-weight: bold;
 }
 .trello-blue {
     background-color: #0079bf;
     color: white;
+    font-weight: bold;
 }
 .trello-lime {
     background-color: #51e898;
     color: white;
+    font-weight: bold;
 }
 .trello-pink {
     background-color: #ff78cb;
     color: white;
+    font-weight: bold;
 }
 .trello-black {
     background-color: #344563;
     color: white;
+    font-weight: bold;
 }
 .trello-none{
     background-color: #b3bac5;
     color: black;
+    font-weight: bold;
 }
 
 .container details summary h2 {
