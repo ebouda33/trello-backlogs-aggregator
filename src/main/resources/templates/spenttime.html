@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <th:block th:include="fragments/header :: header"></th:block>
+</head>
+<body>
+
+<div class="container">
+    <th:block th:include="fragments/menu :: menu"></th:block>
+
+
+    <h2>Spent Time in application development</h2>
+
+
+    <div th:if="${currentMonth != null}">
+
+        <div style="display: flex;margin-bottom: 50px;">
+            <div style="margin-right: 20px;">
+                <select onchange="onChangeMonth(this)">
+                    <th:block th:include="fragments/outils/input :: comboMois(${months}, ${currentMonth})"></th:block>
+                </select>
+            </div>
+            <div style="margin-right: 20px;">
+
+                Semaine :
+                <select th:onchange="'onChangeWeek(this,'+${currentMonth.getIndex()}+')'">
+                    <th:block th:include="fragments/outils/input :: comboWeek(${currentMonth},${currentWeek})"></th:block>
+                </select>
+            </div>
+            <div>
+                <select class="member" onchange="onChangeMember(this)">
+                    <option value="0">Qui êtes vous</option>
+                    <option th:each="member : ${members}" th:text="${member.getName()}"
+                            th:value="${member.getIdentifiant_trello()}" th:selected="${member.getIdentifiant_trello() == currentMember}"></option>
+
+                </select>
+            </div>
+        </div>
+
+        <div th:if="${currentMember} != null">
+            <table class="table table-striped">
+                <thead>
+                    <th>Name</th>
+                    <th:block th:include="fragments/outils/input :: headerTable(${listDays}, ${todayDay},${ today},${ currentMonth},true)"></th:block>
+
+
+
+                </thead>
+                <tr th:each="label,row : ${labels}">
+                    <td th:text="${label.getValue()}" th:class="${'borderright trello-'+label.getKey()}" />
+                    <!--                th:onclick="|showLine(0,${row.index+'_'+0},0)|"-->
+                    <td th:each="day,iter : ${listDays}"
+                        class="borderright day" th:classappend="${day == '00'}? disabled: clickable"
+                        th:disabled="${day == '00'}"
+                        th:onclick="showLine([[${day}]],[[${label.getValue()}]],[[${row.index+'_'+iter.index}]],[[${iter.index}]])"
+                    >
+                        <div style="display: flex;" th:include="fragments/spenttimeInput.html:: inputField(${iter.index},${row.index}, ${label.getValue()})">
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="borderright">TOTAL</td>
+                    <td th:each="day,iter : ${listDays}" class="borderright day"
+                        th:classappend="${day == '00'}? disabled: clickable" th:disabled="${day == '00'}">
+                        <span th:id="${'totalDay_'+iter.index}" listener="calendar" th:day="${iter.index}"></span>
+                    </td>
+                </tr>
+            </table>
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-md-10" id="msgErrorValidation"><span></span></div>
+                    <div class="col-md-2 pull-right">
+                        <button class="btn-default" onclick="saveCalendar(this)">Enregistrer Saisie</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <details>
+                    <summary>
+                        <span> Légende</span>
+
+                    </summary>
+                    <p>La saisie se fait en dixieme de jour, pour un jour = 1, pour une demi/journée = 0.5 etc...</p>
+                    <p>Vous ne pouvez pas saisir plus de 1 jour au total des Types de cartes Trello</p>
+                </details>
+            </div>
+        </div>
+
+        <div th:if="${currentMember} == null">
+            Qui êtes Vous?
+        </div>
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var year = /*[[${currentMonth.getYear()}]]*/ '1';
+    var month = /*[[${currentMonth.getIndex()}]]*/ '1';
+    var week = /*[[${currentWeek}]]*/ '1';
+    var first = /*[[${firstDayWeek}]]*/ undefined;
+    var last = /*[[${lastDayWeek}]]*/ undefined;
+    var labels = /*[[${labels}]]*/ undefined;
+    var boardId = /*[[${id}]]*/ undefined;
+    var content = /*[[${content}]]*/ undefined;
+    var indexFirstDayWeek = /*[[${indexFirstDayWeek}]]*/ undefined;
+    /*]]>*/
+    $(document).ready(function () {
+        generateCalendar(labels, year, month, week, first, last, indexFirstDayWeek);
+        let i = 0;
+        $.each(labels, function (color, value) {
+            for (let j = 0; j < 5; j++) {
+                const id = i + '_' + j;
+                $('#call-modal-cards_' + id).click(function (event) {
+                    event.preventDefault();
+                    this.blur();
+                    getlistsTrello(boardId, id);
+                    // TODO generateCarteenfonction du label
+                    const url = "/cards/" + boardId + "/" + value + "/";
+                    const select = '#modalCards_' + id + '> p > select';
+                    $(select).attr("url", url);
+                    $('#modalCards_' + id).modal({
+                        escapeClose: true,
+                        clickClose: true,
+                        showClose: false,
+                        fadeDuration: 100,
+                        fadeDelay: 0.50
+                    });
+                });
+            }
+            i++;
+        });
+
+        init(boardId);
+    });
+</script>
+
+</body>
+</html>

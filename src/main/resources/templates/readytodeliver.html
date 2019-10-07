@@ -2,26 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 </head>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/menu :: menu"></th:block> /*/-->
 
     <!--/*/ <th:block th:include="fragments/errors :: errors"></th:block> /*/-->
-
-    <h2>User stories ready to deliver</h2>
-    <table class="table table-striped">
-        <tr>
-            <th>Backlog</th>
-            <th>Title</th>
-        </tr>
-        <th:block th:if="cardsReadyToDeliver">
-            <tr th:each="cardwithmembers : ${cardsReadyToDeliver}">
-                <td th:text="${cardwithmembers.backlogName}" />
-                <td><a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}" /></td>                
+    <details open>
+        <summary>
+            <h2>User stories ready to deliver</h2>
+        </summary>
+        <table class="table table-striped">
+            <tr>
+                <th>Backlog</th>
+                <th>Title</th>
             </tr>
-        </th:block>
-    </table>
+            <th:block th:if="cardsReadyToDeliver">
+                <tr th:each="cardwithmembers : ${cardsReadyToDeliver}">
+                    <td th:text="${cardwithmembers.backlogName}"/>
+                    <td><a th:href="${cardwithmembers.card.shortUrl}" th:text="${cardwithmembers.card.name}"
+                           target="_blank"/></td>
+                </tr>
+            </th:block>
+        </table>
+    </details>
 
 </div>
 </html>

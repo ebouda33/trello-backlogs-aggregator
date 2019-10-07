@@ -4,18 +4,6 @@
 
 <title>Trello Backlogs Aggregator</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="../static/css/custom.css" th:href="@{css/custom.css}"
-    rel="stylesheet" media="screen" />
-
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-<link
-    href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
-    th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"
-    rel="stylesheet" media="screen" />
-
-<link href="../static/css/guru.css" th:href="@{css/guru.css}"
-    rel="stylesheet" media="screen" />
 </head>
 <body>
     <div class="container">
@@ -25,7 +13,11 @@
                     <li><a th:href="@{/}">Accueil</a></li>
                     <li><a th:href="@{/sprint}">Sprint</a></li>
                     <li><a th:href="@{/readytodeliver}">Ready to deliver</a></li>
+                    <li><a th:href="@{/spentTime}">Saisie de Temps</a></li>
+                    <li><a th:href="@{/administration}">Administration</a></li>
+
                 </ul>
+                <button class="btn btn-default pull-right" onclick="activateBatch(this)">Start Batch</button>
             </nav>
         </div>
     </div>

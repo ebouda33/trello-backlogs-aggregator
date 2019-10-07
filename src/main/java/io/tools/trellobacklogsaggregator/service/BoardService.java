@@ -18,6 +18,13 @@ public class BoardService {
         board.setConsumedComplexity(board.getConsumedComplexity() + cardService.getConsumedComplexity(card));
         board.setTotalComplexity(board.getTotalComplexity() + cardService.getTotalComplexity(card));
         board.setRemainedComplexity(board.getTotalComplexity() - board.getConsumedComplexity());
+        addCardByLabel(board,card);
         return board;
+    }
+
+    public void addCardByLabel(BoardDetail detail, Card card) {
+        card.getLabels().forEach(label ->
+            detail.addCard(card, label.getName())
+        );
     }
 }

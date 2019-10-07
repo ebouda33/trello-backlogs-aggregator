@@ -48,6 +48,9 @@ public class CustomConfiguration {
     @Value("${trello.column.sprint}")
     private String trelloColumnInSprint;
 
+    @Value("${trello.column.sprint.default}")
+    private String trelloColumnInSprintByDefault;
+
     @Value("${trello.column.readytodeliver}")
     private String trelloColumnReadyToDeliver;
 
@@ -136,5 +139,9 @@ public class CustomConfiguration {
 
     public String getTrelloColumnDeliveredTotal() {
         return trelloColumnDeliveredTotal;
+    }
+
+    public String getTrelloColumnInSprintByDefault() {
+        return trelloColumnInSprintByDefault;
     }
 }
