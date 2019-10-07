@@ -161,3 +161,8 @@ input[type="checkbox"].checkValue:checked:after {
 .container details summary h2 {
     display:inline;
 }
+
+
+nav.navbar button{
+    margin-top: 10px;
+}
