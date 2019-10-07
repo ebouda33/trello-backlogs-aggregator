@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/administration")
-public class AdministrationController {
+public class AdministrationController extends AbstractController {
     @Autowired
     private BacklogsRepository backlogsRepository;
 
@@ -113,6 +113,7 @@ public class AdministrationController {
         model.addAttribute("stats", calendarService.getStatTimeByLabel(currentWeek.getLocalFirstDay(), currentWeek.getLocalLastDay()));
         model.addAttribute("statsByDay", calendarService.getStatTimeByUserAndDate(currentWeek.getLocalFirstDay(), currentWeek.getLocalLastDay()));
 
+        getContext(model);
     }
 
 

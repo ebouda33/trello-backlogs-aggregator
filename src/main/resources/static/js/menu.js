@@ -3,7 +3,7 @@ let btnBatch = null;
 
 function activateBatch(btn) {
     btnBatch = btn;
-    const url = "/batch/start";
+    const url = "batch/start";
     const synchro = 1000;
     $.getJSON(url, null, (data) => {
         if (data.start) {
@@ -22,7 +22,7 @@ function activateBatch(btn) {
 
 statusBatch = () => {
     const btn = btnBatch;
-    $.getJSON("/batch/status", null, (data) => {
+    $.getJSON("batch/status", null, (data) => {
         if (data.running) {
             toggleBtn(btn, null);
         } else {
