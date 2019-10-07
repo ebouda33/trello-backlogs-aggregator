@@ -56,7 +56,7 @@ function saveCalendar(button) {
     button.setAttribute("disabled", true)
     if (isValidCalendar()) {
         displayMsg("Sauvegarde en cours ...", "warning");
-        const url = "/calendar/saves/" + boardId;
+        const url = contextPath+"calendar/saves/" + boardId;
         $.postJSON(url, currentCalendar.toJson(), (data) => {
             currentCalendar.dataToCalendar(data);
             displayMsg("Données sauvegardées", "success");
@@ -106,7 +106,7 @@ function displayMsg(message, error = "danger") {
 }
 
 function checkMember(input, id) {
-    const url = "/administration";
+    const url = "administration";
     $.putJSON(url, JSON.stringify({"id": id, "board": boardId, "status": input.checked}), function (data) {
     }, function (error) {
         console.error(error);

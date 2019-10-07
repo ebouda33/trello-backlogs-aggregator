@@ -53,6 +53,7 @@ public class BatchController {
         }
         sortie.putIfAbsent("running", start);
         sortie.putIfAbsent("message", message);
+
         return ResponseEntity.ok(sortie);
     }
 }

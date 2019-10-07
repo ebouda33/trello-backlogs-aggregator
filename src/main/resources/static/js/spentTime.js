@@ -3,13 +3,13 @@ let listByDefault = undefined;
 
 function onChangeMonth(combo) {
     const month = combo.options[combo.selectedIndex].value;
-    window.location = "/spentTime/" + month;
+    window.location = contextPath+"spentTime/" + month;
 }
 
 function onChangeWeek(combo, currentMonth) {
 
     const week = combo.options[combo.selectedIndex].value;
-    window.location = "/spentTime/" + currentMonth + "/" + week;
+    window.location = contextPath + "spentTime/" + currentMonth + "/" + week;
 }
 
 
@@ -56,18 +56,13 @@ function displayTime(time, id) {
     }
 }
 
-function refreshInfo() {
-    // const time = currentCalendar.getTime(label, column);
-    // displayTime(time);
-}
-
 function init(idBoard) {
     getDefaultList();
 }
 
 function getDefaultList() {
-    const url = "/lists/default";
-    $.ajax(url)
+    const url = "lists/default";
+    $.ajax(contextPath + url)
         .done(function (data) {
             listByDefault = data;
         })
@@ -77,8 +72,8 @@ function getDefaultList() {
 }
 
 function getlistsTrello(idBoard, id) {
-    const url = "/lists/" + idBoard;
-    $.ajax(url)
+    const url = "lists/" + idBoard;
+    $.ajax(contextPath + url)
         .done(function (data) {
             const select = '#modalCards_' + id + '> p > select';
             $(select + ' option').remove();
@@ -112,7 +107,6 @@ function getIdList(select, list) {
 
 function getCards(select, id, label, day) {
     const url = select.getAttribute("url") + select.value;
-    // console.warn(url);
     const zoneCards = $("#" + id)[0];
     $.ajax(url)
         .done(function (data) {
@@ -158,7 +152,7 @@ function generateCardTrello(data, label, day) {
 
 function onChangeMember(select) {
 
-    $.postJSON("/spentTime/currentMember",
+    $.postJSON("spentTime/currentMember",
         select.value, function (data) {
             window.document.location.reload();
         }, function (error) {

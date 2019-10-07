@@ -19,6 +19,7 @@ public class IndexController extends AbstractController {
             model.addAttribute("boards", backlogsRepository.read().getBoards());
             errorManagement(model);
         }
+        getContext(model);
         return "index";
     }
 }

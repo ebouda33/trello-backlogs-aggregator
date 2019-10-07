@@ -57,6 +57,7 @@ public class SprintController extends AbstractController {
             model.addAttribute("totalNbItemsInSprint", totalNbItemsInSprint);
             errorManagement(model);
         }
+        getContext(model);
         return "sprint";
     }
 }

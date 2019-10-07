@@ -19,6 +19,11 @@
                 </ul>
                 <button class="btn btn-default pull-right" onclick="activateBatch(this)">Start Batch</button>
             </nav>
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var contextPath = /*[[@{/}]]*/ '';
+                /*]]>*/
+            </script>
         </div>
     </div>
 </body>

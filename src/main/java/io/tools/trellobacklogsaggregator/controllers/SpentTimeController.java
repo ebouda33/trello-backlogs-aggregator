@@ -116,8 +116,8 @@ public class SpentTimeController extends AbstractController {
             model.addAttribute("currentMember", idMember);
             model.addAttribute("content", currentCalendar(currentMonth.getIndex(), currentWeek.getIndex(), idMember));
 
-
         }
+        getContext(model);
         return model;
     }
 
