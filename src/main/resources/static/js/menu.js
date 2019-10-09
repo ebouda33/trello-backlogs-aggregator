@@ -29,6 +29,8 @@ statusBatch = () => {
             clearInterval(intervalId);
             btnBatch = null;
             toggleBtn(btn, true);
+
+            window.document.location.reload();
         }
         btn.innerHTML = data.message;
     }, (error) => {
