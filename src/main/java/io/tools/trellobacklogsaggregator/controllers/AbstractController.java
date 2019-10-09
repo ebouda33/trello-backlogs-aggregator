@@ -11,7 +11,7 @@ import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
 
 public abstract class AbstractController {
 
-    @Value("${server.servlet.context-path}")
+    @Value("${server.servlet.context-path? : ''}")
     private String contextPath ;
 
     @Autowired
