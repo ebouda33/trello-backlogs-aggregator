@@ -1,38 +1,26 @@
 class ListenerCalendar {
-    #_id;
-    #_label;
-    #_day;
 
 
     constructor(id, label, day) {
-        this.#_id = id;
-        this.#_label = label;
-        this.#_day = day;
+        this._id = id;
+        this._label = label;
+        this._day = day;
     }
 
     countCards() {
-        if (this.#_label !== null && this.#_label !== undefined) {
-            $('#' + this.#_id)[0].innerHTML = `(${currentCalendar.cards[this.#_label][this.#_day].length})`;
+        if (this._label !== null && this._label !== undefined) {
+            $('#' + this._id)[0].innerHTML = `(${currentCalendar.cards[this._label][this._day].length})`;
         }
     }
 
     totalDay() {
-        if (this.#_label === null || this.#_label === undefined) {
-            $('#' + this.#_id)[0].innerHTML = currentCalendar.totalOfZeDay(this.#_day);
+        if (this._label === null || this._label === undefined) {
+            $('#' + this._id)[0].innerHTML = currentCalendar.totalOfZeDay(this._day);
         }
     }
 }
 
 class ExportCalendar {
-    date = null;
-    time = 0;
-    labelTrello = null;
-    user = null;
-    cards = [];
-    id = null;
-    dayInWeek;
-    month;
-    year;
 
 
     constructor(id, date, time, labelTrello, user, cards = [], day) {
@@ -49,18 +37,7 @@ class ExportCalendar {
 }
 
 class CalendarClass {
-    #_id = {};
-    #_calendar = {};
-    #_user;
-    #_year;
-    #_monthNumber;
-    #_weekNumber;
-    #_cards = {};
-    #_listeners = [];
-    #_limitDay = 5;
-    #_firstDay;
-    #_lastDay;
-    #_indexFirstDay;
+
 
 
     constructor( label, year, month, week, firstDay, lastDay, indexFirstDay) {
@@ -71,146 +48,160 @@ class CalendarClass {
         this.lastDay = lastDay;
         this.year = year;
         this.indexFirstDay = indexFirstDay;
+        this._listeners = [];
+
     }
 
 
     get indexFirstDay() {
-        return this.#_indexFirstDay;
+        return this._indexFirstDay;
     }
 
     set indexFirstDay(value) {
-        this.#_indexFirstDay = value;
+        this._indexFirstDay = value;
     }
 
     get id() {
-        return this.#_id;
+        return this._id;
     }
 
     get year() {
-        return this.#_year;
+        return this._year;
     }
 
     get month() {
-        return this.#_monthNumber;
+        return this._monthNumber;
     }
 
     get limitDay() {
-        return this.#_limitDay;
+        return this._limitDay;
     }
 
     get firstDay() {
-        return this.#_firstDay;
+        return this._firstDay;
     }
 
     get lastDay() {
-        return this.#_lastDay;
+        return this._lastDay;
     }
 
     get listeners() {
-        return this.#_listeners;
+        return this._listeners;
     }
 
     get cards() {
-        return this.#_cards;
+        return this._cards;
     }
 
     get calendar() {
-        return this.#_calendar;
+        return this._calendar;
     }
 
     set id(value) {
-        this.#_id = value;
+        this._id = value;
     }
 
     set weekNumber(value) {
-        this.#_weekNumber = value;
+        this._weekNumber = value;
     }
 
     set monthNumber(value) {
-        this.#_monthNumber = value;
+        this._monthNumber = value;
     }
 
 
     set year(value) {
-        this.#_year = value;
+        this._year = value;
     }
 
     set firstDay(value) {
-        this.#_firstDay = value;
+        this._firstDay = value;
     }
 
     set lastDay(value) {
-        this.#_lastDay = value;
+        this._lastDay = value;
     }
 
 
     set user(value) {
-        this.#_user = value;
+        this._user = value;
     }
 
     init(label) {
+        this._id = {};
+        this._calendar = {};
+        this._cards = {};
+        this._user = null;
+        this._year = 0;
+        this._monthNumber = 0;
+        this._weekNumber = 0;
+
+        this._limitDay = 5;
+        this._firstDay = 0;
+        this._lastDay = 0;
+        this._indexFirstDay = 0;
         Object.keys(label).forEach(key => {
-            this.#_calendar[label[key]] = [0, 0, 0, 0, 0];
-            this.#_cards[label[key]] = [[], [], [], [], []];
-            this.#_id[label[key]] = [undefined, undefined, undefined, undefined, undefined];
+            this._calendar[label[key]] = [0, 0, 0, 0, 0];
+            this._cards[label[key]] = [[], [], [], [], []];
+            this._id[label[key]] = [undefined, undefined, undefined, undefined, undefined];
         });
     }
 
     writeTimeToCalendar(label, day, value) {
-        if (this.#_calendar[label] !== undefined) {
+        if (this._calendar[label] !== undefined) {
             value = isNaN(value) || value.trim().length === 0 ? 0 : value * 1;
             value = value > 1 ? 1 : value < 0 ? 0 : value * 1;
-            if(value ==0 ) this.#_cards[label][day] = [];
+            if(value ==0 ) this._cards[label][day] = [];
             value = this.controleCoherenceDay(label, day, value);
-            this.#_calendar[label][day] = value;
+            this._calendar[label][day] = value;
             this.preventListeners();
         }
     }
 
     addCard(label, day, card) {
-        if (this.#_calendar[label] !== undefined && !this.isCardIn(card, label, day)) {
-            this.#_cards[label][day].push(card);
+        if (this._calendar[label] !== undefined && !this.isCardIn(card, label, day)) {
+            this._cards[label][day].push(card);
         }
     }
 
     toggleCard(label, day, card) {
         if (this.isCardIn(card, label, day)) {
-            this.#_cards[label][day] = this.#_cards[label][day].filter(id => id !== card);
+            this._cards[label][day] = this._cards[label][day].filter(id => id !== card);
         } else {
-            this.#_cards[label][day].push(card);
+            this._cards[label][day].push(card);
         }
         this.preventListeners();
     }
 
     getTime(label, day) {
-        return this.#_calendar[label][day];
+        return this._calendar[label][day];
     }
 
 
     toString() {
-        return "{ M:" + this.#_monthNumber + ", W: " + this.#_weekNumber + " , L: " + JSON.stringify(this.#_calendar) + "}";
+        return "{ M:" + this._monthNumber + ", W: " + this._weekNumber + " , L: " + JSON.stringify(this._calendar) + "}";
     }
 
     addListener(element) {
-        this.#_listeners.push(element);
+        this._listeners.push(element);
     }
 
     preventListeners() {
-        this.#_listeners.forEach(listener => {
+        this._listeners.forEach(listener => {
             listener.countCards();
             listener.totalDay();
         });
     }
 
     isCardIn(card, label, day) {
-        return this.#_cards[label][day].find(current => current === card) !== undefined;
+        return this._cards[label][day].find(current => current === card) !== undefined;
     }
 
     controleCoherenceDay(label, day, value) {
         let total = 0;
-        Object.keys(this.#_calendar).forEach(key => {
+        Object.keys(this._calendar).forEach(key => {
             if (key !== label) {
-                total += this.#_calendar[key][day];
+                total += this._calendar[key][day];
             }
         });
         if (total + value > 1) {
@@ -223,8 +214,8 @@ class CalendarClass {
 
     totalOfZeDay(day) {
         let total = 0;
-        Object.keys(this.#_calendar).forEach(key => {
-            total += this.#_calendar[key][day];
+        Object.keys(this._calendar).forEach(key => {
+            total += this._calendar[key][day];
         });
 
         return total;
@@ -233,20 +224,20 @@ class CalendarClass {
     isValid() {
         let total = 0;
         let ok = true;
-        for (let i = 0; i < this.#_limitDay; i++) {
+        for (let i = 0; i < this._limitDay; i++) {
             total += this.totalOfZeDay(i);
             ok = ok && this.controlCardsByDay(i);
         }
 
-        return ok && total <= this.#_limitDay;
+        return ok && total <= this._limitDay;
     }
 
     controlCardsByDay(day) {
         let correct = true;
-        Object.keys(this.#_calendar).forEach(key => {
-            const total = this.#_calendar[key][day];
+        Object.keys(this._calendar).forEach(key => {
+            const total = this._calendar[key][day];
             if (total > 0) {
-                correct = correct && (this.#_cards[key][day].length > 0);
+                correct = correct && (this._cards[key][day].length > 0);
             }
 
         });
@@ -255,15 +246,15 @@ class CalendarClass {
 
     toJson() {
         const calendars = [];
-        Object.keys(this.#_calendar).forEach(key => {
-            for (let day = 0; day < this.#_limitDay; day++) {
-                const time = this.#_calendar[key][day];
-                const cards = this.#_cards[key][day];
-                const id = this.#_id[key][day];
+        Object.keys(this._calendar).forEach(key => {
+            for (let day = 0; day < this._limitDay; day++) {
+                const time = this._calendar[key][day];
+                const cards = this._cards[key][day];
+                const id = this._id[key][day];
                 if(day >= this.indexFirstDay) {
                     const currentDate = TransformerCalendar.transformDayToDate(this, day, this.indexFirstDay);
                     // TODO controler la coherence de la date de début avec celle de la semaine exemple 01/10/2019 => mardi par lundi
-                    calendars.push(new ExportCalendar(id, currentDate, time, key, this.#_user, cards, day));
+                    calendars.push(new ExportCalendar(id, currentDate, time, key, this._user, cards, day));
 
                 }
             }
@@ -274,9 +265,9 @@ class CalendarClass {
     dataToCalendar(data) {
         const that = this;
         $.each(data , function (index, calendar) {
-            that.#_id[calendar.labelTrello][calendar.dayInWeek] = calendar.id;
-            that.#_calendar[calendar.labelTrello][calendar.dayInWeek] = calendar.time;
-            that.#_cards[calendar.labelTrello][calendar.dayInWeek] = calendar.cards.map(cal => cal.id);
+            that._id[calendar.labelTrello][calendar.dayInWeek] = calendar.id;
+            that._calendar[calendar.labelTrello][calendar.dayInWeek] = calendar.time;
+            that._cards[calendar.labelTrello][calendar.dayInWeek] = calendar.cards.map(cal => cal.id);
         });
         that.preventListeners();
     }
