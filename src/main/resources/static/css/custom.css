@@ -68,6 +68,18 @@
     color: #777;
 }
 
+summary:before {
+    font-family: FontAwesome;
+    content: "\f0da";
+    color: black;
+}
+details[open] summary:before {
+    font-family: FontAwesome;
+    content: "\f0dd";
+    color: black;
+}
+
+
 details summary:hover {
     cursor: pointer;
 }
@@ -158,9 +170,9 @@ input[type="checkbox"].checkValue:checked:after {
     font-weight: bold;
 }
 
-.container details summary h2 {
-    display:inline;
-}
+/*.container details summary h2 {*/
+/*    display:inline;*/
+/*}*/
 
 
 nav.navbar button{
