@@ -123,7 +123,7 @@
                     this.blur();
                     getlistsTrello(boardId, id);
                     // TODO generateCarteenfonction du label
-                    const url = contextPath + "cards/" + boardId + "/" + value + "/";
+                    const url = "cards/" + boardId + "/" + value + "/";
                     const select = '#modalCards_' + id + '> p > select';
                     $(select).attr("url", url);
                     $('#modalCards_' + id).modal({

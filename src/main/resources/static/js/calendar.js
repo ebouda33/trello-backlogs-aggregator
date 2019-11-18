@@ -56,7 +56,7 @@ function saveCalendar(button) {
     button.setAttribute("disabled", true)
     if (isValidCalendar()) {
         displayMsg("Sauvegarde en cours ...", "warning");
-        const url = contextPath+"calendar/saves/" + boardId;
+        const url = "calendar/saves/" + boardId;
         $.postJSON(url, currentCalendar.toJson(), (data) => {
             currentCalendar.dataToCalendar(data);
             displayMsg("Données sauvegardées", "success");
