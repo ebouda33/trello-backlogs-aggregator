@@ -108,7 +108,7 @@ function getIdList(select, list) {
 function getCards(select, id, label, day) {
     const url = select.getAttribute("url") + select.value;
     const zoneCards = $("#" + id)[0];
-    $.ajax(url)
+    $.ajax(contextPath + url)
         .done(function (data) {
             if (Array.isArray(data) && data.length === 0) {
                 zoneCards.innerHTML = 'Aucune Carte correspondante';
