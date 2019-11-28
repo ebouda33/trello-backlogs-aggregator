@@ -36,6 +36,9 @@ function endSetTime(e, id, label, column) {
     currentCalendar.writeTimeToCalendar(label, column, value);
     const time = currentCalendar.getTime(label, column);
     displayTime(time, id);
+    if(time == 1) {
+        saveCalendar($('#bt_save').get(0));
+    }
 }
 
 function displayTime(time, id) {

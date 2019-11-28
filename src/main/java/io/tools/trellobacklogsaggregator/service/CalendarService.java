@@ -39,9 +39,6 @@ public class CalendarService {
      * @return
      */
     private CalendarModel save(CalendarModel calendar) {
-        if(calendar.getId() != null){
-            unsplitTimeByCard(calendar);
-        }
         splitTimeByCard(calendar);
         return calendarRepository.save(calendar);
     }
@@ -50,14 +47,24 @@ public class CalendarService {
     public List<CalendarModel> saveAll(List<CalendarModel> calendarsList) {
         calendarsList.stream().forEach(calendarModel -> {
             calendarModel.setBoardID(this.boardId);
-            existanceCard(calendarModel);
+            existenceCards(calendarModel);
             save(calendarModel);
         });
         return calendarsList;
     }
 
-    private void existanceCard(CalendarModel calendarModel) {
+    private void existenceCards(CalendarModel calendarModel) {
+        //annuler tout ce que l on a fait pour ce calendrier
+        clearCalendarModel(calendarModel);
         calendarModel.getCards().stream().forEach(card -> cardService.findAndSave(card));
+    }
+
+    private void clearCalendarModel(CalendarModel calendarModel){
+        unsplitTimeByCard(calendarModel);
+        final List<CardModel> cards = new ArrayList<>(calendarModel.getCards());
+        calendarModel.getCards().clear();
+        calendarRepository.save(calendarModel);
+        calendarModel.setCards(cards);
     }
 
     private void unsplitTimeByCard(CalendarModel calendar){
@@ -83,11 +90,27 @@ public class CalendarService {
     }
 
     private void SumUpTime(List<CardModel> cards, Double unit, int sign) {
-        cards.stream().forEach(cardModel -> {
-            Card trelloCard = trelloApi.getBoardCard(boardId, cardModel.getId());
+        boolean odd = cards.size()%2 != 0;
+        double decal = Math.round((Math.round(unit*cards.size()) - unit*cards.size()) *100.0 )/100.0 ;
+        final Iterator<CardModel> iterator = cards.iterator();
+        while(iterator.hasNext()){
+            final CardModel next = iterator.next();
+            Card trelloCard = trelloApi.getBoardCard(boardId, next.getId());
             final Double timeSpent = cardService.getConsumedComplexity(trelloCard);
-            cardService.setConsumedComplexity(trelloCard, timeSpent + (sign* unit));
-        });
+            double time = Math.round((timeSpent + (sign * unit)) * 100.0) / 100.0;
+            if(!iterator.hasNext()){
+                time +=  sign * decal;
+            }
+            cardService.setConsumedComplexity(trelloCard, time);
+
+        }
+
+//        cards.stream().forEach(cardModel -> {
+//            Card trelloCard = trelloApi.getBoardCard(boardId, cardModel.getId());
+//            final Double timeSpent = cardService.getConsumedComplexity(trelloCard);
+//            final double time = Math.round((timeSpent - (sign * unit)) * 100.0) / 100.0;
+//            cardService.setConsumedComplexity(trelloCard, time);
+//        });
     }
 
     public void setBoardId(String boardId) {
@@ -159,7 +182,8 @@ public class CalendarService {
 
 
     private Double calcTimeBySizeCards(Double time, int size){
-        return Math.round( ( time / size) *100.0) / 100.0;
+        final double res = Math.round((time / size) * 100.0) / 100.0;
+        return res;
     }
 
     public Map<String, Map<String, Double>> getStatTimeByLabel(LocalDate depart, LocalDate fin) {
