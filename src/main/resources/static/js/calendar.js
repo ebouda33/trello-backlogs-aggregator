@@ -76,9 +76,11 @@ function saveCalendar(button) {
                 currentMessage = standarMsg;
             }
             displayMsg(currentMessage);
-            button.removeAttribute("disabled")
+            button.removeAttribute("disabled");
         });
 
+    }else {
+        button.removeAttribute("disabled");
     }
 }
 
