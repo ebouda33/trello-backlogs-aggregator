@@ -60,19 +60,23 @@ public class CalendarService {
     }
 
     private void clearCalendarModel(CalendarModel calendarModel){
-        unsplitTimeByCard(calendarModel);
-        final List<CardModel> cards = new ArrayList<>(calendarModel.getCards());
-        calendarModel.getCards().clear();
-        calendarRepository.save(calendarModel);
-        calendarModel.setCards(cards);
+        if(calendarModel.getId() != null) {
+            unsplitTimeByCard(calendarModel);
+            final List<CardModel> cards = new ArrayList<>(calendarModel.getCards());
+            calendarModel.getCards().clear();
+            calendarRepository.save(calendarModel);
+            calendarModel.setCards(cards);
+        }
     }
 
     private void unsplitTimeByCard(CalendarModel calendar){
-        final Optional<CalendarModel> byId = calendarRepository.findById(calendar.getId());
-        if(byId.isPresent()){
-            final CalendarModel previous = byId.get();
-            Double unit = calcTimeBySizeCards(previous.getTime() , previous.getCards().size());
-            removeTimeToCards(previous.getCards(), unit);
+        if(calendar.getId() != null) {
+            final Optional<CalendarModel> byId = calendarRepository.findById(calendar.getId());
+            if (byId.isPresent()) {
+                final CalendarModel previous = byId.get();
+                Double unit = calcTimeBySizeCards(previous.getTime(), previous.getCards().size());
+                removeTimeToCards(previous.getCards(), unit);
+            }
         }
     }
 
