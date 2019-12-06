@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.persistence.Column;
 import java.io.Serializable;
 
 @Entity(name = "users")
@@ -15,6 +16,9 @@ public class UserModel implements Serializable {
     @Id
     @JsonProperty(value = "id")
     private String identifiant_trello;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean actif;
 
     @Override
     public boolean equals(Object o) {
@@ -50,4 +54,11 @@ public class UserModel implements Serializable {
         this.identifiant_trello = identifiant_trello;
     }
 
+    public boolean isActif() {
+        return actif;
+    }
+
+    public void setActif(boolean actif) {
+        this.actif = actif;
+    }
 }

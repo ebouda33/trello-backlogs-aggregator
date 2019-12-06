@@ -60,7 +60,7 @@ public class AdministrationController extends AbstractController {
 
     @PutMapping(value = "", produces = "application/json")
     public @ResponseBody
-    ResponseEntity updateMember(@RequestBody SwitchMember payload) {
+    ResponseEntity updateMember(@RequestBody SwitchMember payload) throws Exception {
 
         calendarService.setMember(payload.getId(), payload.isStatus(), payload.getBoard());
 
