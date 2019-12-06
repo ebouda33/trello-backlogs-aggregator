@@ -111,6 +111,7 @@ function checkMember(input, id) {
     const url = "administration";
     $.putJSON(url, JSON.stringify({"id": id, "board": boardId, "status": input.checked}), function (data) {
     }, function (error) {
+        input.checked = !input.checked;
         console.error(error);
     });
 }

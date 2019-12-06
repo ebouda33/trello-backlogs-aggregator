@@ -129,16 +129,19 @@ public class CalendarService {
     }
 
     public List<UserModel> getMembers() {
-        return userRepository.findAll();
+        return userRepository.findAllByActif(true);
     }
 
     public Map<Member, Boolean> getMembersForScreen(String boardId) {
         final List<Member> members = getMembersFromBoard(boardId);
         final Map<Member, Boolean> memberBooleanMap = new LinkedHashMap<>();
-        final List<UserModel> all = getMembers();
-        members.stream().sorted((m1, m2) -> m1.getFullName().toLowerCase().compareTo(m2.getFullName().toLowerCase())).forEach(member ->
+        members.stream().sorted(Comparator.comparing(m -> m.getFullName().toLowerCase())).forEach(member ->
         {
-            final boolean present = all.stream().filter(userModel -> userModel.getIdentifiant_trello().equalsIgnoreCase(member.getId())).findFirst().isPresent();
+            final Optional<UserModel> byId = userRepository.findById(member.getId());
+            boolean present = false;
+            if(byId.isPresent()){
+                present = byId.get().isActif();
+            }
             memberBooleanMap.putIfAbsent(member, present);
         });
         return memberBooleanMap;
@@ -153,17 +156,19 @@ public class CalendarService {
         });
     }
 
-    public void setMember(String id, boolean status, String boardId) {
+    public void setMember(String id, boolean status, String boardId) throws Exception {
         final List<Member> membersFromBoard = getMembersFromBoard(boardId);
         final Optional<Member> first = membersFromBoard.stream().filter(member -> member.getId().equalsIgnoreCase(id)).findFirst();
-        if (status && first.isPresent()) {
-            UserModel user = new UserModel();
+        UserModel user = new UserModel();
+        if (first.isPresent()) {
             user.setIdentifiant_trello(first.get().getId());
             user.setName(first.get().getFullName());
+            user.setActif(status);
             userRepository.save(user);
-        } else if (first.isPresent()) {
-            userRepository.deleteById(first.get().getId());
+        }else {
+            throw new Exception("Member Trello inconnu ???");
         }
+
     }
 
     public List<CalendarModel> getCalendarFor(int month, int week, String member) {
