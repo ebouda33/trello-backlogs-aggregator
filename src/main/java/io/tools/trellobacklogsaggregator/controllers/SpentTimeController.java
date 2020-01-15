@@ -1,10 +1,9 @@
 package io.tools.trellobacklogsaggregator.controllers;
 
 
-import io.tools.trellobacklogsaggregator.bean.SwitchMember;
-import io.tools.trellobacklogsaggregator.bean.TimeByLabel;
 import io.tools.trellobacklogsaggregator.model.*;
 import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
+import io.tools.trellobacklogsaggregator.service.BoardService;
 import io.tools.trellobacklogsaggregator.service.CalendarService;
 import io.tools.trellobacklogsaggregator.service.UtilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,16 @@ import java.util.*;
 @SessionAttributes("spentTimer")
 public class SpentTimeController extends AbstractController {
 
-    @Autowired
-    private BacklogsRepository backlogsRepository;
+
+    private CalendarService calendarService;
+
+    private BoardService boardService;
 
     @Autowired
-    private CalendarService calendarService;
+    public SpentTimeController(CalendarService calendarService, BoardService boardService) {
+        this.calendarService = calendarService;
+        this.boardService = boardService;
+    }
 
     @GetMapping("")
     public String index(HttpServletRequest request, Model model) {
@@ -65,7 +69,7 @@ public class SpentTimeController extends AbstractController {
         request.getSession().setAttribute("currentWeek", week);
         request.getSession().setAttribute("currentMember", idMember);
 
-        if (backlogsRepository.read() != null) {
+        if (boardService.isReadableRepository()) {
             getModel(model, Optional.ofNullable(getCurrentMonth(request)), Optional.ofNullable(getCurrentWeek(request)), getCurrentMember(request));
             errorManagement(model);
         }
@@ -73,9 +77,10 @@ public class SpentTimeController extends AbstractController {
     }
 
     private Model getModel(Model model, Optional<Integer> month, Optional<Integer> week, String idMember) {
-        if (backlogsRepository.read() != null) {
-            BoardDetail boardDetail = backlogsRepository.read().getBoards().get(0);
-            Map<String, String> labelNames = boardDetail.getSource().getLabelNames();
+        if (boardService.isReadableRepository()) {
+            BoardDetail boardDetail = boardService.getBoardDetail();
+            Map<String, String> labelNames = boardService.getLabelPrincipal();
+
             final List<MonthRest> listMonthsRest = UtilService.getListMonthsRest();
 
 

@@ -60,6 +60,9 @@ public class CustomConfiguration {
     @Value("${trello.column.delivered.total}")
     private String trelloColumnDeliveredTotal;
 
+    @Value("${trello.labels.secondaire}")
+    private String trelloLabelsSecondaire;
+
     private List<String> columnAllowed;
     private List<String> columnInSprintAllowed;
     private List<String> columnReadyToDeliverAllowed;
@@ -143,5 +146,9 @@ public class CustomConfiguration {
 
     public String getTrelloColumnInSprintByDefault() {
         return trelloColumnInSprintByDefault;
+    }
+
+    public List<String> getTrelloLabelsSecondaire() {
+        return parseColumnsField(trelloLabelsSecondaire);
     }
 }
