@@ -265,9 +265,11 @@ class CalendarClass {
     dataToCalendar(data) {
         const that = this;
         $.each(data , function (index, calendar) {
-            that._id[calendar.labelTrello][calendar.dayInWeek] = calendar.id;
-            that._calendar[calendar.labelTrello][calendar.dayInWeek] = calendar.time;
-            that._cards[calendar.labelTrello][calendar.dayInWeek] = calendar.cards.map(cal => cal.id);
+            if(that._id[calendar.labelTrello] !== undefined) {
+                that._id[calendar.labelTrello][calendar.dayInWeek] = calendar.id;
+                that._calendar[calendar.labelTrello][calendar.dayInWeek] = calendar.time;
+                that._cards[calendar.labelTrello][calendar.dayInWeek] = calendar.cards.map(cal => cal.id);
+            }
         });
         that.preventListeners();
     }
