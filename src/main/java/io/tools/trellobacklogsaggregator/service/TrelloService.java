@@ -1,9 +1,6 @@
 package io.tools.trellobacklogsaggregator.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -27,23 +24,27 @@ import io.tools.trellobacklogsaggregator.model.Sprint;
 @Service
 public class TrelloService {
 
-    @Autowired
     private TrelloApi trelloApi;
 
-    @Autowired
     private BoardService boardService;
 
-    @Autowired
     private ListService listService;
 
-    @Autowired
     private SprintService sprintService;
 
-    @Autowired
     private CardService cardService;
 
-    @Autowired
     private CustomConfiguration customConfiguration;
+
+    @Autowired
+    public TrelloService(TrelloApi trelloApi, BoardService boardService, ListService listService, SprintService sprintService, CardService cardService, CustomConfiguration customConfiguration) {
+        this.trelloApi = trelloApi;
+        this.boardService = boardService;
+        this.listService = listService;
+        this.sprintService = sprintService;
+        this.cardService = cardService;
+        this.customConfiguration = customConfiguration;
+    }
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -63,11 +64,18 @@ public class TrelloService {
         for (Board board : storiesBoards) {
             List<TList> tLists = board.fetchLists();
             List<Label> boardLabels = trelloApi.getBoardLabels(board.getId());
-            final Map<String, String> map = boardLabels.stream().collect(Collectors.toMap(Label::getColor, Label::getName));
-            board.setLabelNames(map);
-            List<Label> boardCardTypeLabels = boardLabels.stream().filter(label -> (!"Stock".equals(label.getName()) && !"Hotfix".equals(label.getName())))
+//            final Map<String, String> map = boardLabels.stream().collect(Collectors.toMap(Label::getColor, Label::getName));
+//            board.setLabelNames(map);
+            final List<Label> labelPrincipal = boardService.getLabelPrincipal(Optional.of(boardLabels));
+            List<Label> boardCardTypeLabels = boardLabels.stream()
+                    .filter(label ->
+                            labelPrincipal.contains(label.getName())
+                    )
                     .collect(Collectors.toList());
+
+
             detailedBoard = new BoardDetail(board);
+            detailedBoard.setListLabels(boardLabels);
             boardLabels.stream().forEach(label -> detailedBoard.createList(label.getName()));
             try {
                 listService.checkListConsistency(tLists);
@@ -104,6 +112,8 @@ public class TrelloService {
         backlogsData.setSprint(sprint);
         backlogsData.setCardsWithMembersReadyToDeliver(cardsWithMembersReadyToDeliver);
         backlogsData.setErrors(errors);
+
+
         return backlogsData;
     }
 
