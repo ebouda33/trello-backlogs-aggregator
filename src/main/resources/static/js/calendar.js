@@ -11,9 +11,10 @@ function generateCalendar(labels, year, month, week, firstDay, lastDay, indexFir
     }
     const maxDay = 5;
     let i = 0;
-    Object.keys(labels).forEach(key => {
+
+    Object.values(labels).forEach(value => {
         for (let j = 0; j < maxDay; j++) {
-            displayTime(currentCalendar.getTime(labels[key], j), i + '_' + j);
+            displayTime(currentCalendar.getTime(value.name, j), i + '_' + j);
         }
         i++;
     });

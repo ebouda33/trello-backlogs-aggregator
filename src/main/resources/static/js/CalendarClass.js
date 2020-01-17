@@ -140,10 +140,10 @@ class CalendarClass {
         this._firstDay = 0;
         this._lastDay = 0;
         this._indexFirstDay = 0;
-        Object.keys(label).forEach(key => {
-            this._calendar[label[key]] = [0, 0, 0, 0, 0];
-            this._cards[label[key]] = [[], [], [], [], []];
-            this._id[label[key]] = [undefined, undefined, undefined, undefined, undefined];
+        Object.values(label).forEach(value => {
+            this._calendar[value.name] = [0, 0, 0, 0, 0];
+            this._cards[value.name] = [[], [], [], [], []];
+            this._id[value.name] = [undefined, undefined, undefined, undefined, undefined];
         });
     }
 
