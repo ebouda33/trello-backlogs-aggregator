@@ -66,13 +66,8 @@ public class TrelloService {
             List<Label> boardLabels = trelloApi.getBoardLabels(board.getId());
 //            final Map<String, String> map = boardLabels.stream().collect(Collectors.toMap(Label::getColor, Label::getName));
 //            board.setLabelNames(map);
-            final List<Label> labelPrincipal = boardService.getLabelPrincipal(Optional.of(boardLabels));
-            List<Label> boardCardTypeLabels = boardLabels.stream()
-                    .filter(label ->
-                            labelPrincipal.contains(label.getName())
-                    )
-                    .collect(Collectors.toList());
-
+            final List<Label> boardCardTypeLabels = boardService.getLabelPrincipal(Optional.of(boardLabels));
+//
 
             detailedBoard = new BoardDetail(board);
             detailedBoard.setListLabels(boardLabels);
