@@ -1,5 +1,6 @@
 package io.tools.trellobacklogsaggregator.controllers;
 
+import com.julienvey.trello.domain.Label;
 import com.julienvey.trello.domain.Member;
 import io.tools.trellobacklogsaggregator.bean.SwitchMember;
 import io.tools.trellobacklogsaggregator.execptions.NumericException;
@@ -8,6 +9,7 @@ import io.tools.trellobacklogsaggregator.model.MonthRest;
 import io.tools.trellobacklogsaggregator.model.UserModel;
 import io.tools.trellobacklogsaggregator.model.WeekRest;
 import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
+import io.tools.trellobacklogsaggregator.service.BoardService;
 import io.tools.trellobacklogsaggregator.service.CalendarService;
 import io.tools.trellobacklogsaggregator.service.UtilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class AdministrationController extends AbstractController {
     @Autowired
     private CalendarService calendarService;
 
+    @Autowired
+    private BoardService boardService;
 
     final List<MonthRest> listMonthsRest = UtilService.getListMonthsRest();
 
@@ -86,7 +90,8 @@ public class AdministrationController extends AbstractController {
             currentWeek = currentMonth.getWeekRestList().get(week.get());
         }
 
-        Map<String, String> labelNames = boardDetail.getSource().getLabelNames();
+//        Map<String, String> labelNames = boardDetail.getSource().getLabelNames();
+        List<Label> labelNames = boardService.getLabelPrincipal(Optional.empty());
         final int pMonth = currentMonth.getIndex();
         final int pWeek = currentWeek.getIndex();
 
