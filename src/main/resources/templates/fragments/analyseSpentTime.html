@@ -21,12 +21,12 @@
                 <thead>
                 <th>QUI</th>
                 <th th:each="label : ${labels}"><span
-                        th:text="${label.getValue()}"></span></th>
+                        th:text="${label.getName()}"></span></th>
                 </thead>
                 <tbody>
                     <tr th:each="member,iter : ${members}">
                         <td th:text="${member.getName()}"></td>
-                        <td th:each="label,iter : ${labels}" > <span th:if="${stats.get(member.getName()) != null && stats.get(member.getName()).get(label.getValue()) != null}" th:text="${stats.get(member.getName()).get(label.getValue())}"></span> </td>
+                        <td th:each="label,iter : ${labels}" > <span th:if="${stats.get(member.getName()) != null && stats.get(member.getName()).get(label.getName()) != null}" th:text="${stats.get(member.getName()).get(label.getName())}"></span> </td>
                     </tr>
                 </tbody>
             </table>

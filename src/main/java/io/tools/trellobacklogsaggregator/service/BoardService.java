@@ -1,6 +1,6 @@
 package io.tools.trellobacklogsaggregator.service;
 
-import com.julienvey.trello.domain.Board;
+import com.julienvey.trello.domain.Label;
 import io.tools.trellobacklogsaggregator.configuration.CustomConfiguration;
 import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +10,10 @@ import com.julienvey.trello.domain.Card;
 
 import io.tools.trellobacklogsaggregator.model.BoardDetail;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +26,7 @@ public class BoardService {
 
     private CustomConfiguration customConfiguration;
 
-    private Map<String,String> labelPrincipal;
+    private List<Label> labelPrincipal;
 
     @Autowired
     public BoardService( BacklogsRepository backlogsRepository,CardService cardService, CustomConfiguration customConfiguration) {
@@ -49,21 +50,22 @@ public class BoardService {
         );
     }
 
-    public Map<String, String> getLabelPrincipal() {
+    public List<Label> getLabelPrincipal(Optional<List<Label>> labelsTrello) {
         if(labelPrincipal == null) {
-            BoardDetail boardDetail = getBoardDetail();
-            Map<String, String> labelNames = boardDetail.getSource().getLabelNames();
+//            Map<String, String> labelNames = boardDetail.getSource().getLabelNames();
+            List<Label> listLabels ;
+            if(labelsTrello.isPresent()){
+                listLabels = labelsTrello.get();
+            }else {
+                BoardDetail boardDetail = getBoardDetail();
+                listLabels = boardDetail.getListLabels();
+            }
             List<String> labelsSecondaires = customConfiguration.getTrelloLabelsSecondaire();
-            labelPrincipal = labelNames.entrySet()
-                    .stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            labelNames.forEach((key, value) -> {
-                labelsSecondaires.forEach(labelSecondaire -> {
-                    if (value.equalsIgnoreCase(labelSecondaire)) {
-                        labelPrincipal.remove(key);
-                    }
-                });
-            });
+
+            labelPrincipal = listLabels.stream()
+                    .filter(label -> !labelsSecondaires.contains(label.getName().toLowerCase()))
+                    .collect(Collectors.toList());
+
         }
 
         return labelPrincipal;

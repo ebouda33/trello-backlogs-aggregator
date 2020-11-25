@@ -2,6 +2,7 @@ package io.tools.trellobacklogsaggregator.model;
 
 import com.julienvey.trello.domain.Board;
 import com.julienvey.trello.domain.Card;
+import com.julienvey.trello.domain.Label;
 import io.tools.trellobacklogsaggregator.execptions.ListException;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class BoardDetail {
     private Double totalComplexity = 0D;
     private Board source;
     private List<ListByLabel> listsByLabel;
+    private List<Label> listLabels;
 
     public BoardDetail(Board board) {
         this.source = board;
@@ -40,6 +42,14 @@ public class BoardDetail {
 
     public Optional<ListByLabel> getListByLabel(String label) {
         return listsByLabel.stream().filter(listByLabel -> listByLabel.getName().equalsIgnoreCase(label)).findFirst();
+    }
+
+    public void setListLabels(List<Label> listLabels) {
+        this.listLabels = listLabels;
+    }
+
+    public List<Label> getListLabels() {
+        return listLabels;
     }
 
     public Double getBusinessComplexity() {

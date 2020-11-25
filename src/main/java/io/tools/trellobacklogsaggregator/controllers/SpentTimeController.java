@@ -1,6 +1,7 @@
 package io.tools.trellobacklogsaggregator.controllers;
 
 
+import com.julienvey.trello.domain.Label;
 import io.tools.trellobacklogsaggregator.model.*;
 import io.tools.trellobacklogsaggregator.repository.BacklogsRepository;
 import io.tools.trellobacklogsaggregator.service.BoardService;
@@ -79,7 +80,7 @@ public class SpentTimeController extends AbstractController {
     private Model getModel(Model model, Optional<Integer> month, Optional<Integer> week, String idMember) {
         if (boardService.isReadableRepository()) {
             BoardDetail boardDetail = boardService.getBoardDetail();
-            Map<String, String> labelNames = boardService.getLabelPrincipal();
+            List<Label> labelNames = boardService.getLabelPrincipal(Optional.empty());
 
             final List<MonthRest> listMonthsRest = UtilService.getListMonthsRest();
 
